@@ -1,0 +1,4053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Araling Panlipunan 7 Term 1 Test</title>
+
+    <style>
+
+/* ==================================================
+   GLOBAL COLOR VARIABLES
+   Madaling palitan ang theme colors ng buong system
+================================================== */
+
+        :root {
+            --primary: #1f4e79;
+            --primary-dark: #163a5a;
+            --border: #d9dee5;
+            --background: #f4f6f9;
+            --card: #ffffff;
+            --text: #222;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+/* ==================================================
+   MAIN PAGE LAYOUT
+   Overall appearance ng exam system
+================================================== */
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            padding: 24px;
+        }
+/* Main container ng buong exam */
+      
+.exam-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+      
+/* White card na naglalaman ng test */
+        .exam-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+/* ==================================================
+   EXAM HEADER
+   Title at subtitle ng exam
+================================================== */
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 16px;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #666;
+            margin-top: 6px;
+        }
+
+/* ==================================================
+   STUDENT INFORMATION FORM
+   Pangalan at Grade/Section
+================================================== */
+
+        .student-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field-group label {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .field-group input {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+/* ==================================================
+   SCORE DISPLAY
+   Nagpapakita ng total score at items
+================================================== */
+
+        .score-section {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 24px;
+            padding: 12px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .score-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .button-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .button-bar button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .button-bar button:hover {
+            background: var(--primary-dark);
+        }
+
+/* ==================================================
+   QUESTIONS CONTAINER
+   Dito nirerender ang mga tanong
+================================================== */
+      
+        .questions-section {
+            border: 2px dashed var(--border);
+            border-radius: 10px;
+            padding: 24px;
+            min-height: 300px;
+            background: #fafafa;
+        }
+
+        .placeholder {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .score-section {
+                justify-content: center;
+            }
+
+            .button-bar {
+                flex-direction: column;
+            }
+
+            .button-bar button {
+                width: 100%;
+            }
+        }
+      
+.submission-bar{
+    margin-top:20px;
+    display:flex;
+    justify-content:flex-end;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.submission-bar button{
+    padding:12px 24px;
+    border:none;
+    border-radius:6px;
+    background:var(--primary);
+    color:white;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.submission-bar button:hover{
+    background:var(--primary-dark);
+}
+      
+      @media (max-width: 600px){
+
+    .submission-bar{
+        flex-direction:column;
+    }
+
+    .submission-bar button{
+        width:100%;
+    }
+
+}
+
+/* ==================================================
+   ADMIN MENU
+   Save, Export, Load, Answer Sheet,
+   at Recreate Test functions
+================================================== */
+     
+.admin-dropdown{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+}
+
+#adminMenuBtn{
+    background:transparent;
+    border:none;
+    color:black;
+    font-size:18px;
+    cursor:pointer;
+    padding:0;
+    line-height:1;
+}
+
+#adminMenuBtn:hover{
+    opacity:0.7;
+}
+
+.admin-dropdown-content{
+    display:none;
+    margin-top:8px;
+
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+}
+
+.admin-dropdown-content button{
+    padding:10px 16px;
+    border:none;
+    border-radius:6px;
+    background:#f4f6f9;
+    color:#222;
+    cursor:pointer;
+}
+
+.admin-dropdown-content button:hover{
+    background:#e8edf3;
+}
+      
+      @media (max-width: 600px){
+
+    .admin-dropdown-content{
+        flex-direction:column;
+        width:100%;
+        align-items:center;
+    }
+
+    .admin-dropdown-content button{
+        width:200px;
+    }
+
+}
+    
+      .recreate-panel{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:10px;
+}
+
+#qrPasteInput{
+    width:520px;
+    max-width:100%;
+    min-height:120px;
+    padding:12px;
+    border:1px solid #d9dee5;
+    border-radius:6px;
+    resize:vertical;
+    font-family:monospace;
+}
+
+#recreateTestBtn{
+    margin-top:10px;
+}
+     
+      #loadedQrContainer{
+    display:none;
+    margin-top:15px;
+    width:100%;
+    text-align:center;
+}
+
+#loadedQrCode{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+}
+
+/* ==================================================
+   TEST NAVIGATION
+   Unit Tests, Summative Tests, Examination
+================================================== */
+
+.test-nav{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.test-nav button{
+    padding:10px 18px;
+    border:none;
+    border-radius:6px;
+    background:#1f4e79;
+    color:white;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.test-nav button:hover{
+    background:#163a5a;
+}      
+ 
+@media (max-width: 430px){
+
+    .test-nav{
+        flex-direction:column;
+        align-items:stretch;
+        width:100%;
+    }
+
+    .test-nav button{
+        width:100%;
+    }
+
+}      
+ 
+.test-nav button.active{
+    background:#2e7d32;
+    color:white;
+    font-weight:bold;
+}
+
+.test-nav button.active:hover{
+    background:#1b5e20;
+}      
+
+/* ==================================================
+   STICKY HEADER
+   Nananatili sa itaas habang nag-scroll
+================================================== */
+
+.sticky-top-area{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+
+    background:#ffffff;
+
+    padding:10px;
+
+    border-bottom:1px solid #d9dee5;
+
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+      
+body{
+    padding-top:180px;
+}      
+ 
+.mobile-menu-btn{
+    display:none;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    background:#1f4e79;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    margin-bottom:10px;
+}
+
+/* Mobile */
+@media (max-width:768px){
+
+    .mobile-menu-btn{
+        display:block;
+    }
+
+    .test-nav{
+        display:none;
+        flex-direction:column;
+        width:100%;
+        gap:8px;
+    }
+
+    .test-nav.show{
+        display:flex;
+    }
+
+    .test-nav button{
+        width:100%;
+    }
+}      
+      
+#studentName,
+#gradeSection {
+    text-transform: uppercase;
+}
+
+.error-highlight{
+    border:3px solid red !important;
+    background:#ffe5e5 !important;
+}
+
+.question-error{
+    border:3px solid red !important;
+    border-radius:8px;
+    padding:10px;
+    background:#fff0f0;
+}      
+
+.answer-sheet-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.answer-item{
+    border-bottom:1px solid #ddd;
+    padding:6px 0;
+}
+
+.answer-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.answer-row label{
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+}
+
+.correct-mark{
+    color:green;
+    font-weight:bold;
+    margin-left:10px;
+}
+
+.wrong-mark{
+    color:red;
+    font-weight:bold;
+    margin-left:10px;
+}
+
+.answer-header{
+    margin-bottom:20px;
+    padding-bottom:12px;
+    border-bottom:2px solid #000;
+}
+
+.answer-title{
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.answer-info{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    flex-wrap:wrap;
+    font-size:14px;
+}
+
+.answer-info div{
+    font-weight:bold;
+}
+
+/* ==================================================
+   ANSWER SHEET STYLES
+   Para sa printable checking form
+================================================== */
+      
+.answer-sheet-paper{
+    width:210mm;
+    min-height:297mm;
+    margin:0 auto;
+    padding:12mm;
+    background:#fff;
+    color:#000;
+    box-sizing:border-box;
+}
+      
+@media screen and (max-width:900px){
+    .answer-sheet-paper{
+        width:100%;
+        min-height:auto;
+        padding:15px;
+    }
+} 
+
+.answer-sheet-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}     
+
+.answer-choice{
+    width:36px;
+    height:36px;
+    border:2px solid #000;
+    border-radius:50%;
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:bold;
+    font-size:16px;
+    background:#fff;
+    color:#000;
+    margin-right:4px;
+    flex-shrink:0;
+}
+
+.answer-choice.selected{
+    background:#000;
+    color:#fff;
+}     
+ 
+.answer-row{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.answer-number{
+    width:95px;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:4px;
+    flex-shrink:0;
+}
+
+.student-number{
+    width:24px;
+    text-align:right;
+    font-weight:bold;
+    font-family:"Courier New", monospace;
+}
+
+.original-number{
+    width:40px;
+    text-align:left;
+    font-size:12px;
+    color:#555;
+    font-family:"Courier New", monospace;
+}
+
+
+.answer-choice{
+    width:36px;
+    height:36px;
+    border:2px solid #000;
+    border-radius:50%;
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:bold;
+    font-size:16px;
+    background:#fff;
+    color:#000;
+    flex-shrink:0;
+}
+
+.correct-mark,
+.wrong-mark{
+    width:20px;
+    text-align:center;
+    margin-left:6px;
+}      
+
+/* ==================================================
+   PRINT STYLES
+   Ito lamang ang makikita kapag nag-print
+================================================== */      
+      
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    #answerSheetSection,
+    #answerSheetSection * {
+        visibility: visible;
+    }
+
+    #answerSheetSection {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    body {
+        padding-top: 0 !important;
+        background: white !important;
+    }
+
+}
+      
+@media print {
+
+    .sticky-top-area,
+    .button-bar,
+    .submission-bar,
+    .student-info,
+    .score-section,
+    #loadedQrContainer,
+    #reviewSection,
+    #questionsContainer {
+        display: none !important;
+    }
+
+    #answerSheetSection {
+        display: block !important;
+    }
+
+}
+      
+@media print {
+
+    #answerSheetSection:not(:has(.answer-sheet-paper)) {
+        display: none !important;
+    }
+
+}
+      
+@media screen and (max-width: 600px){
+
+    .answer-number{
+        width:50px;
+        height:15.333px;
+        gap:1px;
+    }
+
+    .student-number{
+        width:15px;
+        font-size:12px;
+    }
+
+    .original-number{
+        width:32px;
+        font-size:10px;
+    }
+
+    .answer-choice{
+        width:20px;
+        height:20px;
+        font-size:12px;
+    }
+
+    .correct-mark,
+    .wrong-mark{
+        width:14px;
+        margin-left:2px;
+    }
+
+} 
+      
+@media screen and (max-width: 600px){
+
+    .answer-sheet-grid{
+        grid-template-columns:1fr;
+    }
+
+} 
+
+.answer-footer{
+    margin-top:25px;
+    border-top:2px solid #000;
+    padding-top:15px;
+
+    display:flex;
+    align-items:flex-start;
+    gap:15px;
+
+    font-size:12px;
+}
+
+/* Step 1 mas malaki */
+.footer-step:first-child{
+    flex:2;
+}
+
+/* Step 2, 3, 4 pantay-pantay */
+.footer-step:nth-child(2),
+.footer-step:nth-child(3),
+.footer-step:nth-child(4){
+    flex:1;
+}
+
+.footer-step{
+    text-align:center;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.footer-qr{
+    width:250px;
+    height:250px;
+    margin:0 auto 8px;
+}
+      
+.footer-qr-small{
+    width:80px;
+    height:80px;
+    margin:0 auto 8px;
+}      
+
+.footer-step p{
+    margin:0;
+    line-height:1.3;
+}
+
+/* Mobile */
+@media screen and (max-width:600px){
+
+    .answer-footer{
+        flex-direction:column;
+    }
+
+    .footer-step:first-child,
+    .footer-step:nth-child(2),
+    .footer-step:nth-child(3),
+    .footer-step:nth-child(4){
+        flex:auto;
+        width:100%;
+    }
+
+}
+      
+      
+    </style>
+</head>
+
+<body>
+
+<script src="qrcode.min.js"></script>
+
+    <div class="exam-container">
+        <div class="exam-card">
+
+<div class="sticky-top-area">
+
+<div style="text-align:center;">
+    <p id="examSubtitle">
+        <b>Select a test below</b>
+    </p>
+</div>
+  
+<br />  
+
+<button id="mobileMenuBtn" class="mobile-menu-btn">
+    ☰ Tests
+</button>  
+
+<!-- ==========================*======================
+     TEST S*LECTION MENU
+     Pinipili kung an*ng test ang bubuksan
+=============*==================================* -->
+  
+    <nav class="test-nav">
+        <button onclick="loadTest('unit1')">Unit Test 1</button>
+        <button onclick="loadTest('unit2')">Unit Test 2</button>
+        <button onclick="loadTest('unit3')">Unit Test 3</button>
+        <button onclick="loadTest('unit4')">Unit Test 4</button>
+        <button onclick="loadTest('unit5')">Unit Test 5</button>
+        <button onclick="loadTest('summative1')">Summative Test 1</button>
+        <button onclick="loadTest('summative2')">Summative Test 2</button>
+        <button onclick="loadTest('exam')">Examination</button>
+    </nav>
+
+    <div class="header">
+        <h1 id="examTitle">
+            Araling Panlipunan 7 Term 1
+        </h1>
+    </div>
+
+</div>
+        
+<!-- ====================*============================
+     *TUDENT INFORMATION
+     Name at Gr*de/Section
+=======================*========================= -->
+
+            <div class="student-info">
+                <div class="field-group">
+                    <label for="studentName">Student Name</label>
+                    <input type="text" id="studentName" placeholder="Enter student name">
+                </div>
+
+                <div class="field-group">
+    <label for="gradeSection">Grade &amp; Section</label>
+    <input
+        type="text"
+        id="gradeSection"
+        placeholder="Example: 8-Masipag">
+</div>
+            </div>
+
+
+<!-- ==*==================================*===========
+     LIVE SCORE DISPLA*
+================================================= -->
+          
+<div class="score-section">
+    <div class="score-display">
+        Score:
+        <span id="scoreValue">_____</span> /
+        <span id="totalItemsValue">0</span>
+    </div>
+</div>
+
+            <div class="button-bar">
+
+<!-- =================================================
+     ADMIN TOOLS
+     Save Review
+     Export
+     Load
+     Answer Sheet
+     Refresh
+================================================= -->
+              
+    <div class="admin-dropdown">
+
+    <button id="adminMenuBtn">
+    ▼
+</button>
+
+<div id="adminDropdownContent"
+     class="admin-dropdown-content">
+
+<button id="saveReviewBtn">
+    Save
+</button>
+
+    <button id="exportHtmlBtn">
+        Export
+    </button>
+
+    <button id="loadJsonBtn">
+        Load
+    </button>
+  
+<button id="answerSheetBtn">
+    Answer Sheet
+</button>
+
+    <button id="refreshBtn">
+        Refresh
+    </button>
+
+    <div class="recreate-panel">
+
+<textarea
+            id="qrPasteInput"
+            placeholder="Paste QR Result Here">
+</textarea>
+
+        <button id="recreateTestBtn">
+            Recreate Test
+        </button>
+
+    </div>
+
+</div>
+      
+<div id="loadedQrContainer"
+     style="
+        display:none;
+        margin-top:15px;
+        text-align:center;
+        width:100%;
+     ">
+    <div id="loadedQrCode"></div>
+</div>      
+
+
+<input
+    type="file"
+    id="jsonFileInput"
+    accept=".json"
+    style="display:none;"
+>
+
+</div>
+              </div>
+
+
+<!-- =================================================
+     QUESTIONS WILL BE GENERATED HERE
+================================================= -->          
+          
+<div id="questionsContainer" class="questions-section"></div>
+          
+<!-- =================================================
+     STUDENT ACTION BUTTONS
+     Save Answers / Reset Answers
+================================================= -->          
+          
+              <div class="submission-bar">
+
+    <button id="saveResponsesBtn">
+        Save Answers
+    </button>
+
+    <button id="newResponseBtn">
+        Reset Answers
+    </button>
+
+</div>
+
+                <!-- QUESTIONS GO HERE -->
+
+                <div class="placeholder">
+                    <!--Question content will be inserted in future parts.-->
+                </div>
+
+            </div>
+
+        </div> 
+  
+    <script>
+      
+/* ==================================================
+   APPLICATION STARTUP
+   Kinukuha ang references ng mga buttons
+   at HTML elements
+================================================== */
+      
+        "use strict";
+
+        const saveResponsesBtn = document.getElementById("saveResponsesBtn");
+const saveReviewBtn =
+    document.getElementById("saveReviewBtn");
+        const exportHtmlBtn = document.getElementById("exportHtmlBtn");
+        const loadJsonBtn = document.getElementById("loadJsonBtn");
+      
+const answerSheetBtn =
+    document.getElementById("answerSheetBtn");
+          
+      const newResponseBtn =
+    document.getElementById("newResponseBtn");
+        const jsonFileInput = document.getElementById("jsonFileInput");
+      
+      
+      const adminMenuBtn =
+    document.getElementById("adminMenuBtn");
+
+const adminDropdownContent =
+    document.getElementById(
+        "adminDropdownContent"
+    );
+
+      const recreateTestBtn =
+    document.getElementById(
+        "recreateTestBtn"
+    );
+      
+      const refreshBtn =
+    document.getElementById("refreshBtn");
+      
+function closeAdminDropdown() {
+
+    adminDropdownContent.style.display = "none";
+
+}
+
+adminMenuBtn.addEventListener(
+    "click",
+    () => {
+
+        adminDropdownContent.style.display =
+    adminDropdownContent.style.display ===
+    "flex"
+        ? "none"
+        : "flex";
+    }
+);
+
+        saveResponsesBtn.addEventListener("click", saveResponses);
+
+saveReviewBtn.addEventListener(
+    "click",
+    saveReviewFile
+);
+
+        exportHtmlBtn.addEventListener(
+    "click",
+    exportReviewHTMLProtected
+);
+
+      function loadJSONProtected() {
+    closeAdminDropdown();
+    jsonFileInput.click();
+}
+      
+loadJsonBtn.addEventListener(
+    "click",
+    loadJSONProtected
+);
+      
+answerSheetBtn.addEventListener(
+    "click",
+    showAnswerSheet
+);      
+
+newResponseBtn.addEventListener(
+    "click",
+    submitAnotherResponse
+);
+
+refreshBtn.addEventListener(
+    "click",
+    submitAnotherResponse
+);
+      
+      recreateTestBtn.addEventListener(
+    "click",
+    recreateTestFromPaste
+);
+
+        jsonFileInput.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    loadExamFromJSON(file);
+});
+
+        // FUTURE VARIABLES GO HERE
+
+        // FUTURE DATA STRUCTURES GO HERE
+      
+
+/* ==================================================
+   UNIT TEST QUESTION BANK
+================================================== */
+      
+const unitTest1Questions = [
+{
+    id: 1,
+    question: "Ano ang tawag sa tiyak na lokasyon ng isang lugar gamit ang latitude at longitude?",
+    choices: ["Relative location", "Absolute location", "Direksyon", "Rehiyon"],
+    correctAnswer: "B"
+},
+{
+    id: 2,
+    question: "Ano ang tawag sa guhit na naghahati sa daigdig sa Hilagang Hemisperyo at Timog Hemisperyo?",
+    choices: ["Prime Meridian", "Longitude", "Ekwador", "International Date Line"],
+    correctAnswer: "C"
+},
+{
+    id: 3,
+    question: "Ano ang tawag sa malalaking bahagi ng crust ng daigdig na gumagalaw?",
+    choices: ["Fault", "Tectonic Plate", "Bulkan", "Lambak"],
+    correctAnswer: "B"
+},
+{
+    id: 4,
+    question: "Ano ang tawag sa sonang kilala ring Circum-Pacific Seismic Belt?",
+    choices: ["Pacific Ring of Fire", "Tropic of Cancer", "Equator", "Indian Ocean Belt"],
+    correctAnswer: "A"
+},
+{
+    id: 5,
+    question: "Alin sa sumusunod ang bansang kabilang sa Mainland Timog-Silangang Asya?",
+    choices: ["Indonesia", "Pilipinas", "Vietnam", "Brunei"],
+    correctAnswer: "C"
+},
+{
+    id: 6,
+    question: "Ano ang tawag sa pangmatagalang kalagayan ng atmospera sa isang lugar?",
+    choices: ["Panahon", "Klima", "Vegetation", "Topograpiya"],
+    correctAnswer: "B"
+},
+{
+    id: 7,
+    question: "Ano ang tawag sa yamang nagmumula sa kalikasan?",
+    choices: ["Produkto", "Likas na Yaman", "Teknolohiya", "Imbensyon"],
+    correctAnswer: "B"
+},
+{
+    id: 8,
+    question: "Alin sa sumusunod ang halimbawa ng yamang mineral?",
+    choices: ["Palay", "Isda", "Ginto", "Kahoy"],
+    correctAnswer: "C"
+},
+{
+    id: 9,
+    question: "Aling bansa ang nangunguna sa pagluluwas ng langis ng niyog at kopra?",
+    choices: ["Thailand", "Pilipinas", "Laos", "Cambodia"],
+    correctAnswer: "B"
+},
+{
+    id: 10,
+    question: "Alin sa sumusunod ang pinakamahusay na halimbawa ng relative location?",
+    choices: [
+        "Matatagpuan ito sa pagitan ng tiyak na latitude at longitude",
+        "Matatagpuan ito sa hilaga ng isang kalapit na bansa",
+        "Matatagpuan ito sa sonang tropikal ng Silangang Asya",
+        "Matatagpuan ito sa guhit na ginagamit sa pandaigdigang oras"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 11,
+    question: "Bakit madalas makaranas ng lindol ang Pilipinas?",
+    choices: [
+        "Matatagpuan ito sa rehiyong may maraming monsoon wind",
+        "Matatagpuan ito sa sona ng aktibong tectonic activity",
+        "Matatagpuan ito sa bahaging may malaking populasyon",
+        "Matatagpuan ito sa lugar na may malawak na kagubatan"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 12,
+    question: "Bakit tinatawag na bansang insular ang Pilipinas?",
+    choices: [
+        "Binubuo ito ng maraming pulong napapalibutan ng tubig",
+        "Binubuo ito ng malalawak na lambak at kapatagan",
+        "Binubuo ito ng magkakadikit na mga tangway at look",
+        "Binubuo ito ng magkakaugnay na malalaking kalupaan"
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 13,
+    question: "Bakit sagana ang rainforest sa Timog-Silangang Asya?",
+    choices: [
+        "Nakararanas ito ng makapal na niyebe sa kabundukan",
+        "Nakararanas ito ng sapat na init at pag-ulan taon-taon",
+        "Nakararanas ito ng mahabang taglamig sa bawat taon",
+        "Nakararanas ito ng tuyong klimang katulad ng disyerto"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 14,
+    question: "Ano ang implikasyon ng pagiging bahagi ng Pacific Ring of Fire ng Pilipinas?",
+    choices: [
+        "Nakararanas ito ng mahabang panahon ng tag-init",
+        "Nakararanas ito ng malawakang paglawak ng disyerto",
+        "Nakararanas ito ng madalas na lindol at bulkanismo",
+        "Nakararanas ito ng matinding kakulangan sa ulan"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 15,
+    question: "Ano ang pangunahing pagkakaiba ng biotic at abiotic resources?",
+    choices: [
+        "Ang biotic ay mula sa dagat samantalang sa lupa ang abiotic",
+        "Ang biotic ay gawa ng tao samantalang likas ang abiotic",
+        "Ang biotic ay buhay samantalang ang abiotic ay di-buhay",
+        "Ang biotic ay mineral samantalang ang abiotic ay halaman"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 16,
+    question: "Bakit itinuturing na renewable resource ang mga puno?",
+    choices: [
+        "Maaari itong gawin gamit ang makabagong teknolohiya",
+        "Maaari itong maparami muli sa wastong pangangasiwa",
+        "Maaari itong malikha mula sa mga yamang mineral",
+        "Maaari itong mabuo pagkaraan ng milyun-milyong taon"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 17,
+    question: "Bakit sagana sa likas na yaman ang Timog-Silangang Asya?",
+    choices: [
+        "Taglay nito ang pinakamababang populasyon sa daigdig",
+        "Taglay nito ang pinakamahabang panahon ng taglamig",
+        "Taglay nito ang iba’t ibang klima at anyong lupa",
+        "Taglay nito ang pinakamalalawak na disyerto sa mundo"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 18,
+    question: "Bakit mahalaga ang mga likas na yaman sa isang bansa?",
+    choices: [
+        "Nagsisilbi itong simbolo ng kapangyarihang pulitikal",
+        "Nagsisilbi itong batayan sa pagbuo ng hangganan",
+        "Nagsisilbi itong palamuti sa kapaligiran ng bansa",
+        "Nagsisilbi itong pinagkukunan ng pagkain at kabuhayan"
+    ],
+    correctAnswer: "D"
+},
+{
+    id: 19,
+    question: "Naligaw ka sa isang lugar at may dala kang mapa. Ano ang pinakamahalagang kaalamang dapat gamitin?",
+    choices: [
+        "Pag-alam sa populasyon at ekonomiya ng pook",
+        "Pagkilala sa kasaysayan at kultura ng komunidad",
+        "Pagtukoy sa direksyon at lokasyon ng mga lugar",
+        "Pag-uuri sa mga halaman at hayop sa paligid"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 20,
+    question: "Nakatira ka malapit sa isang aktibong fault line. Ano ang pinakamainam gawin?",
+    choices: [
+        "Manatili sa bahay kahit may babala ng panganib",
+        "Maghintay lamang hanggang magkaroon ng pagyanig",
+        "Umasa lamang sa impormasyon mula sa kapitbahay",
+        "Maghanda gamit ang hazard map at evacuation plan"
+    ],
+    correctAnswer: "D"
+},
+{
+    id: 21,
+    question: "Paano makatutulong ang kaalaman sa klima sa mga magsasaka?",
+    choices: [
+        "Matutukoy nito ang dami ng lupaing masasaka",
+        "Matutukoy nito ang laki ng magiging populasyon",
+        "Matutukoy nito ang wastong panahon ng pagtatanim",
+        "Matutukoy nito ang eksaktong presyo ng produkto"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 22,
+    question: "Ano ang dapat gawin upang mapangalagaan ang likas na yaman?",
+    choices: [
+        "Magmina sa mga watershed at protektadong lugar",
+        "Magsunog ng mga basura sa bukas na kapaligiran",
+        "Magsagawa ng pagtatanim at wastong paggamit ng yaman",
+        "Magpalawak ng pagtotroso sa natitirang kagubatan"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 23,
+    question: "Kung nakatira ka sa baybayin, anong likas na yaman ang malamang na pangunahing pagkukunan ng kabuhayan?",
+    choices: [
+        "Yamang nagmumula sa mga lambak at talampas",
+        "Yamang nagmumula sa mga karagatan at baybayin",
+        "Yamang nagmumula sa mga kagubatan at burol",
+        "Yamang nagmumula sa mga minahan at bundok"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 24,
+    question: "Bakit mas mahalaga ang transportasyong pandagat sa mga bansang insular kaysa mainland?",
+    choices: [
+        "Binubuo ito ng maraming lungsod na industriyal",
+        "Binubuo ito ng mga rehiyong mababa ang populasyon",
+        "Binubuo ito ng mga pulong pinagdurugtong ng dagat",
+        "Binubuo ito ng malalawak na lambak at kapatagan"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 25,
+    question: "Ano ang kaugnayan ng lokasyon at klima?",
+    choices: [
+        "Nakaaapekto ang populasyon sa klima at lokasyon",
+        "Nakaaapekto ang lokasyon sa klima ng isang lugar",
+        "Nakaaapekto ang ekonomiya sa klima at lokasyon",
+        "Nakaaapekto ang klima sa pagbabago ng lokasyon"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 26,
+    question: "Matapos ang bagyo, mas mahirap ihatid ang tulong sa isang bansang arkipelago. Ano ang pangunahing dahilan?",
+    choices: [
+        "Magkakahiwalay ang mga pulong kailangang marating",
+        "Magkakapareho ang kabuhayan ng mga naninirahan",
+        "Magkakatulad ang kultura ng mga mamamayan dito",
+        "Magkakalayo ang mga sentrong komersiyal ng bansa"
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 27,
+    question: "Bakit nakatutulong ang malalaking ilog sa pag-unlad ng mga bansa?",
+    choices: [
+        "Nagpapabago ito ng lokasyon ng mga bansa",
+        "Nagbibigay ito ng tubig at enerhiya sa pamayanan",
+        "Nagpapataas ito ng temperatura ng kapaligiran",
+        "Nagpaparami ito ng kabundukan sa rehiyon"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 28,
+    question: "Alin ang pinakamabisang paraan upang mabawasan ang panganib ng lindol at pagputok ng bulkan?",
+    choices: [
+        "Pagsunod sa hazard map at mga protocol sa kaligtasan",
+        "Pagtitiwala lamang sa mga karanasan ng komunidad",
+        "Pananatili sa tahanan kahit may kautusang lumikas",
+        "Pag-iwas sa lahat ng gawaing pangkabuhayan sa lugar"
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 29,
+    question: "Alin sa mga sumusunod ang pinakamahusay na pagpapakita ng pagpapahalaga sa likas na yaman?",
+    choices: [
+        "Paggamit ng yaman para sa mabilisang industriyalisasyon",
+        "Paggamit ng yaman nang walang limitasyon sa pagkuha",
+        "Paggamit ng yaman nang may pananagutan at pag-iingat",
+        "Paggamit ng yaman upang mapataas ang agarang kita"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 30,
+    question: "Bilang SK Chairperson, alin sa mga sumusunod ang pinakamainam na programang maaari mong buuin upang mapangalagaan ang likas na yaman ng inyong komunidad?",
+    choices: [
+        "Programang nakatuon sa pagpapaunlad ng mga gusali",
+        "Programang nakatuon sa pagpapataas ng produksiyong mineral",
+        "Programang nakatuon sa konserbasyon at rehabilitasyon ng kapaligiran",
+        "Programang nakatuon sa pagpapalawak ng paggamit ng lupain"
+    ],
+    correctAnswer: "C"
+}
+];      
+      
+const unitTest2Questions = [
+{
+    id: 1,
+    question: "Ano ang tawag sa mga yamang nagmumula sa kalikasan at ginagamit ng tao upang matugunan ang kanyang pangangailangan?",
+    choices: ["Yamang Tao", "Likas na Yaman", "Kapital", "Produkto"],
+    correctAnswer: "B"
+},
+{
+    id: 2,
+    question: "Alin sa mga sumusunod ang kabilang sa yamang mineral?",
+    choices: ["Palay", "Kawayan", "Ginto", "Hipon"],
+    correctAnswer: "C"
+},
+{
+    id: 3,
+    question: "Ano ang tawag sa mga likas na yamang nagmumula sa buhay o dating nabuhay na organismo?",
+    choices: ["Abiotic Resources", "Non-renewable Resources", "Renewable Resources", "Biotic Resources"],
+    correctAnswer: "D"
+},
+{
+    id: 4,
+    question: "Anong bansa ang kilala sa pagkakaroon ng maraming punong teak (tik)?",
+    choices: ["Laos", "Vietnam", "Myanmar", "Brunei"],
+    correctAnswer: "C"
+},
+{
+    id: 5,
+    question: "Aling bansa sa Timog Silangang Asya ang isa sa mga nangungunang prodyuser ng rubber sa buong mundo?",
+    choices: ["Thailand", "Cambodia", "Brunei", "Singapore"],
+    correctAnswer: "A"
+},
+{
+    id: 6,
+    question: "Ano ang tawag sa elektrisidad na nalilikha mula sa lakas ng umaagos na tubig?",
+    choices: ["Solar Power", "Wind Power", "Hydroelectric Power", "Geothermal Power"],
+    correctAnswer: "C"
+},
+{
+    id: 7,
+    question: "Ano ang tawag sa pagpapalit ng gamit ng lupa mula sakahan tungo sa pabahay o komersyal na lugar?",
+    choices: ["Urbanisasyon", "Land Conversion", "Reforestation", "Migrasyon"],
+    correctAnswer: "B"
+},
+{
+    id: 8,
+    question: "Ano ang pangunahing kabuhayan ng maraming mamamayan sa Timog Silangang Asya?",
+    choices: ["Agrikultura", "Pagmimina", "Turismo", "Komersyo"],
+    correctAnswer: "A"
+},
+{
+    id: 9,
+    question: "Ano ang tawag sa pagkaubos o pagkawala ng mga puno sa kagubatan?",
+    choices: ["Habitat Loss", "Siltation", "Deforestation", "Desertification"],
+    correctAnswer: "C"
+},
+{
+    id: 10,
+    question: "Bakit mahalaga ang likas na yaman sa pang-araw-araw na buhay ng tao?",
+    choices: [
+        "Nagbibigay ito ng pagkain, hanapbuhay, at hilaw na materyales.",
+        "Nagbibigay ito ng dagdag na espasyo para sa pagtatayo ng mga gusali.",
+        "Nagbibigay ito ng pagkakataong makagawa ng mas maraming produkto lamang.",
+        "Nagbibigay ito ng paraan upang mapalawak ang mga sentrong pangkalakalan."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 11,
+    question: "Bakit itinuturing na renewable resource ang mga puno?",
+    choices: [
+        "Dahil nananatili ang dami nito kahit patuloy na ginagamit.",
+        "Dahil maaari itong mapalitan o maparami muli kung aalagaan.",
+        "Dahil matatagpuan ito sa iba't ibang bahagi ng mundo.",
+        "Dahil ginagamit ito sa paggawa ng maraming produkto."
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 12,
+    question: "Bakit sagana sa likas na yaman ang Timog Silangang Asya?",
+    choices: [
+        "Dahil sa tropikal na klima at magandang lokasyon nito.",
+        "Dahil sa malawak na disyerto at tuyong kapaligiran nito.",
+        "Dahil sa mataas na bilang ng mga industriyang matatagpuan dito.",
+        "Dahil sa malaking bahagi ng lupaing ginagamit para sa kalakalan."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 13,
+    question: "Bakit mahalaga ang yamang gubat sa rehiyon?",
+    choices: [
+        "Dahil nakatutulong ito sa paglawak ng mga sentrong urban.",
+        "Dahil tirahan ito ng mga hayop at pinagkukunan ng kahoy.",
+        "Dahil nagagamit ito bilang pangunahing lugar ng industriyalisasyon.",
+        "Dahil nakapagpaparami ito ng mga komersyal na establisimyento."
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 14,
+    question: "Bakit tinatawag na agrikultural na rehiyon ang Timog Silangang Asya?",
+    choices: [
+        "Dahil maraming pabrika at sonang industriyal ang matatagpuan dito.",
+        "Dahil may matabang lupa, ilog, at sapat na ulan para sa pagsasaka.",
+        "Dahil karamihan sa populasyon ay nakatira sa mga lungsod.",
+        "Dahil malaking bahagi ng kita nito ay mula sa turismo."
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 15,
+    question: "Bakit karaniwang nasa tabing-dagat o nakatayo sa mga poste ang bahay ng mga mangingisda?",
+    choices: [
+        "Upang maging mas malapit sa kanilang lugar ng hanapbuhay.",
+        "Upang magkaroon ng mas malaking espasyo para sa negosyo.",
+        "Upang maging mas madaling mapuntahan ng mga turista.",
+        "Upang magkaroon ng mas maayos na daan para sa transportasyon."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 16,
+    question: "Bakit mahalaga ang ecological balance?",
+    choices: [
+        "Upang mapanatili ang kaayusan ng kalikasan.",
+        "Upang mapalawak ang mga lugar para sa industriyalisasyon.",
+        "Upang mapataas ang produksyon ng mga komersyal na produkto.",
+        "Upang maparami ang mga gawaing may kaugnayan sa pagmimina."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 17,
+    question: "Bakit mahalaga ang ozone layer?",
+    choices: [
+        "Dahil nagsisilbi itong panangga laban sa mapaminsalang UV rays.",
+        "Dahil nagsisilbi itong pinagkukunan ng enerhiya ng mga halaman.",
+        "Dahil nagsisilbi itong dahilan ng pagbuo ng mga ulap at ulan.",
+        "Dahil nagsisilbi itong tagapagbigay ng init sa ibabaw ng daigdig."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 18,
+    question: "Ano ang pangunahing layunin ng likas-kayang pag-unlad?",
+    choices: [
+        "Pangalagaan ang kalikasan habang natutugunan ang pangangailangan ng tao.",
+        "Palawakin ang paggamit ng likas na yaman upang mapabilis ang kita.",
+        "Paramihin ang mga gawaing pang-industriya sa lahat ng pamayanan.",
+        "Palakihin ang produksyon nang hindi isinasaalang-alang ang epekto nito."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 19,
+    question: "Napansin mong maraming kalat sa ilog sa inyong barangay. Ano ang pinakamabuting gawin?",
+    choices: [
+        "Makilahok sa paglilinis ng ilog at tamang pagtatapon ng basura.",
+        "Hikayatin ang mga tao na ilipat lamang ang basura sa ibang lugar.",
+        "Maghintay na lamang ng programang ilulunsad ng pamahalaan.",
+        "Mangolekta ng basura ngunit iwanan ito sa tabing-ilog."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 20,
+    question: "Nais ng inyong klase na makatulong sa pangangalaga ng likas na yaman. Alin sa mga sumusunod ang pinakamahusay na gawain?",
+    choices: [
+        "Magsagawa ng pagtatanim ng puno sa komunidad.",
+        "Gumamit ng mas maraming papel sa lahat ng proyekto.",
+        "Magtapon ng basura sa mga bakanteng lote.",
+        "Pabayaan ang mga ilog at kagubatan sa komunidad."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 21,
+    question: "Plano ng isang pamahalaan na magtayo ng dam sa isang malaking ilog upang makalikha ng elektrisidad. Anong uri ng enerhiya ang kanilang lilikhain?",
+    choices: [
+        "Enerhiyang nagmumula sa init ng ilalim ng lupa.",
+        "Enerhiyang nalilikha mula sa lakas ng hangin.",
+        "Enerhiyang nalilikha mula sa umaagos na tubig.",
+        "Enerhiyang nagmumula sa sinag ng araw."
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 22,
+    question: "Maraming sakahan sa inyong bayan ang ginawang subdivision. Ano ang posibleng maging epekto nito?",
+    choices: [
+        "Mababawasan ang lupang maaaring gamitin sa pagtatanim.",
+        "Madaragdagan ang lawak ng mga lugar na agrikultural.",
+        "Mapapalawak ang produksyon ng mga pangunahing pananim.",
+        "Magkakaroon ng mas maraming bahagi ng lupa para sa pagsasaka."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 23,
+    question: "Nagsagawa ang inyong paaralan ng waste segregation at recycling campaign. Anong layunin ng likas-kayang pag-unlad ang isinusulong nito?",
+    choices: [
+        "Pangangalaga sa kapaligiran at responsableng paggamit ng yaman.",
+        "Pagpapalawak ng mga programang pang-industriya sa komunidad.",
+        "Pagdaragdag ng konsumo ng mga produktong gawa sa plastik.",
+        "Pagpapabilis ng pagtatayo ng mga imprastraktura sa paaralan."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 24,
+    question: "Isang barangay ang nagtatanim ng puno taon-taon habang ang isa naman ay patuloy na pumuputol ng puno. Aling barangay ang mas malamang na magkaroon ng mas maayos na kalagayan ng kapaligiran sa hinaharap?",
+    choices: [
+        "Barangay na nagtatanim at nangangalaga ng mga puno.",
+        "Barangay na gumagamit ng kahoy para sa lahat ng pangangailangan.",
+        "Barangay na pinuputol ang mga puno nang walang kapalit.",
+        "Barangay na walang programa para sa pangangalaga ng kalikasan."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 25,
+    question: "Limitado ang likas na yaman ng Singapore ngunit isa ito sa mga maunlad na bansa sa rehiyon. Ano ang pangunahing dahilan nito?",
+    choices: [
+        "Mahalaga ang lokasyon nito sa kalakalan, industriya, at serbisyo.",
+        "Malawak ang sakahang pinagkukunan nito ng produktong agrikultural.",
+        "Nagtataglay ito ng pinakamalalaking kagubatan sa rehiyon.",
+        "Mayaman ito sa iba't ibang uri ng yamang mineral."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 26,
+    question: "Sa isang lalawigan, maraming kagubatan ang ginawang komersyal na lugar at pabahay. Alin ang pinakamalamang na epekto nito?",
+    choices: [
+        "Mababawasan ang sakahan at tirahan ng mga hayop.",
+        "Madaragdagan ang lawak ng mga kagubatan sa nasabing lugar.",
+        "Mapaparami ang bilang ng mga species ng halaman at hayop.",
+        "Mapapahusay ang biodiversity sa loob ng komunidad."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 27,
+    question: "Patuloy na nababawasan ang kagubatan sa isang rehiyon. Ano ang pinaka-posibleng epekto nito sa biodiversity?",
+    choices: [
+        "Mababawasan ang bilang ng mga halaman at hayop.",
+        "Madaragdagan ang dami ng mga organismo sa kagubatan.",
+        "Magiging mas matatag ang tirahan ng iba't ibang species.",
+        "Mapapalawak ang saklaw ng mga natural na ecosystem."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 28,
+    question: "Alin sa mga sumusunod ang pinakamahalagang pakinabang ng yamang tubig sa Timog Silangang Asya?",
+    choices: [
+        "Nagbibigay ito ng pagkain, kabuhayan, at transportasyon.",
+        "Nagbibigay ito ng mas maraming lugar para sa pagmimina.",
+        "Nagpapalawak ito ng mga sentrong komersyal sa kabundukan.",
+        "Nagpaparami ito ng mga produktong gawa sa kahoy."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 29,
+    question: "Alin sa mga sumusunod ang pinakamainam na paraan upang mapaunlad ang kabuhayan ng mga tao at mapangalagaan ang likas na yaman?",
+    choices: [
+        "Isulong ang responsableng paggamit ng lupa at likas na yaman.",
+        "Palawakin ang mga komersyal na lugar sa lahat ng sakahan.",
+        "Dagdagan ang pagkuha ng likas na yaman nang walang limitasyon.",
+        "Gamitin ang lahat ng yamang kalikasan para sa mabilisang kita."
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 30,
+    question: "Inatasan ang inyong klase na bumuo ng programang pangkalikasan para sa paaralan. Alin sa mga sumusunod ang pinakamahusay na plano na nagpapakita ng likas-kayang pag-unlad?",
+    choices: [
+        "Pagbuo ng programang nagtatanim ng puno, nagsasagawa ng waste segregation, recycling, at pagtitipid ng tubig at kuryente.",
+        "Pagbuo ng programang nakatuon lamang sa pagpapaganda ng mga gusali sa paaralan.",
+        "Pagbuo ng programang nagpapalawak ng paradahan sa pamamagitan ng pagputol ng mga puno.",
+        "Pagbuo ng programang nagpapataas ng paggamit ng disposable materials sa kantina."
+    ],
+    correctAnswer: "A"
+}
+];
+
+const unitTest3Questions = [];
+
+const unitTest4Questions = [];
+
+const unitTest5Questions = [];
+
+const summativeTest1Questions = [
+{
+    id: 1,
+    question: "Ano ang tawag sa tiyak na lokasyon ng isang lugar gamit ang latitude at longitude?",
+    choices: ["Relative Location", "Absolute Location", "Rehiyon", "Direksyon"],
+    correctAnswer: "B"
+},
+{
+    id: 2,
+    question: "Ano ang tawag sa guhit na naghahati sa daigdig sa Hilagang Hemisperyo at Timog Hemisperyo?",
+    choices: ["Prime Meridian", "Longitude", "Ekwador", "International Date Line"],
+    correctAnswer: "C"
+},
+{
+    id: 3,
+    question: "Alin sa sumusunod ang bansang kabilang sa Mainland Timog-Silangang Asya?",
+    choices: ["Pilipinas", "Indonesia", "Vietnam", "Brunei"],
+    correctAnswer: "C"
+},
+{
+    id: 4,
+    question: "Ano ang tawag sa sonang kilala ring Circum-Pacific Seismic Belt?",
+    choices: ["Pacific Ring of Fire", "Tropic of Cancer", "Ekwador", "Indian Ocean Belt"],
+    correctAnswer: "A"
+},
+{
+    id: 5,
+    question: "Ano ang tawag sa pangmatagalang kalagayan ng atmospera sa isang lugar?",
+    choices: ["Panahon", "Klima", "Topograpiya", "Vegetation"],
+    correctAnswer: "B"
+},
+{
+    id: 6,
+    question: "Ano ang tawag sa yamang nagmumula sa kalikasan at ginagamit ng tao upang matugunan ang kanyang pangangailangan?",
+    choices: ["Kapital", "Produkto", "Likas na Yaman", "Yamang Tao"],
+    correctAnswer: "C"
+},
+{
+    id: 7,
+    question: "Alin sa sumusunod ang halimbawa ng yamang mineral?",
+    choices: ["Palay", "Isda", "Kahoy", "Ginto"],
+    correctAnswer: "D"
+},
+{
+    id: 8,
+    question: "Ano ang tawag sa pagkawala o pagkaubos ng mga puno sa kagubatan?",
+    choices: ["Desertification", "Habitat Loss", "Deforestation", "Siltation"],
+    correctAnswer: "C"
+},
+{
+    id: 9,
+    question: "Bakit tinatawag na bansang insular ang Pilipinas?",
+    choices: [
+        "Binubuo ito ng magkakadikit na kalupaan",
+        "Binubuo ito ng maraming pulong napapalibutan ng tubig",
+        "Binubuo ito ng malalawak na lambak",
+        "Binubuo ito ng magkakaugnay na tangway"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 10,
+    question: "Bakit madalas makaranas ng lindol ang Pilipinas?",
+    choices: [
+        "Dahil sa monsoon winds",
+        "Dahil sa aktibong tectonic activity",
+        "Dahil sa malaking populasyon",
+        "Dahil sa malawak na kagubatan"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 11,
+    question: "Bakit sagana ang rainforest sa Timog-Silangang Asya?",
+    choices: [
+        "Dahil sa makapal na niyebe",
+        "Dahil sa sapat na init at pag-ulan taon-taon",
+        "Dahil sa mahabang taglamig",
+        "Dahil sa tuyong klima"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 12,
+    question: "Bakit mahalaga ang yamang gubat sa rehiyon?",
+    choices: [
+        "Tirahan ito ng mga hayop at pinagkukunan ng kahoy",
+        "Sentro ito ng industriya",
+        "Nagpaparami ito ng komersyal na establisimyento",
+        "Nagpapalawak ito ng urbanisasyon"
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 13,
+    question: "Bakit sagana sa likas na yaman ang Timog-Silangang Asya?",
+    choices: [
+        "Dahil sa tropikal na klima at lokasyon nito",
+        "Dahil sa malawak na disyerto",
+        "Dahil sa mataas na industriyalisasyon",
+        "Dahil sa kaunting populasyon"
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 14,
+    question: "Ano ang pangunahing pagkakaiba ng biotic at abiotic resources?",
+    choices: [
+        "Ang biotic ay buhay at ang abiotic ay di-buhay",
+        "Ang biotic ay mineral at ang abiotic ay halaman",
+        "Ang biotic ay gawa ng tao",
+        "Pareho silang di-buhay"
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 15,
+    question: "Ano ang pangunahing layunin ng likas-kayang pag-unlad?",
+    choices: [
+        "Paramihin ang industriya",
+        "Palawakin ang pagmimina",
+        "Pangalagaan ang kalikasan habang natutugunan ang pangangailangan ng tao",
+        "Pataasin ang kita ng mga negosyo"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 16,
+    question: "Naligaw ka sa isang lugar at may dala kang mapa. Ano ang pinakamahalagang kaalaman na dapat gamitin?",
+    choices: [
+        "Pagkilala sa populasyon",
+        "Pag-aaral ng kasaysayan",
+        "Pagtukoy sa direksyon at lokasyon",
+        "Pagkilala sa kultura"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 17,
+    question: "Paano makatutulong ang kaalaman sa klima sa mga magsasaka?",
+    choices: [
+        "Matutukoy ang presyo ng produkto",
+        "Matutukoy ang wastong panahon ng pagtatanim",
+        "Matutukoy ang populasyon",
+        "Matutukoy ang lawak ng lupa"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 18,
+    question: "Ano ang dapat gawin upang mapangalagaan ang likas na yaman?",
+    choices: [
+        "Magmina sa protektadong lugar",
+        "Palawakin ang pagtotroso",
+        "Magsagawa ng pagtatanim at wastong paggamit ng yaman",
+        "Magsunog ng basura"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 19,
+    question: "Maraming sakahan sa inyong bayan ang ginawang subdivision. Ano ang posibleng epekto nito?",
+    choices: [
+        "Madadagdagan ang lupang sakahan",
+        "Lalawak ang agrikultura",
+        "Mababawasan ang lupang maaaring taniman",
+        "Tataas ang produksyon ng pananim"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 20,
+    question: "Bakit mas mahalaga ang transportasyong pandagat sa mga bansang insular kaysa mainland?",
+    choices: [
+        "Maraming industriya rito",
+        "Mababang populasyon nito",
+        "Binubuo ito ng mga pulong pinagdurugtong ng dagat",
+        "Maraming lambak at kapatagan"
+    ],
+    correctAnswer: "C"
+},
+{
+    id: 21,
+    question: "Ano ang kaugnayan ng lokasyon at klima?",
+    choices: [
+        "Nakaaapekto ang lokasyon sa klima ng isang lugar",
+        "Nakaaapekto ang ekonomiya sa klima",
+        "Nakaaapekto ang populasyon sa klima",
+        "Nakaaapekto ang klima sa lokasyon"
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 22,
+    question: "Patuloy na nababawasan ang kagubatan sa isang rehiyon. Ano ang pinaka-posibleng epekto nito sa biodiversity?",
+    choices: [
+        "Dadami ang mga species",
+        "Mababawasan ang bilang ng mga halaman at hayop",
+        "Lalawak ang ecosystem",
+        "Magiging mas matatag ang tirahan ng mga hayop"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 23,
+    question: "Alin ang pinakamabisang paraan upang mabawasan ang panganib ng lindol at pagputok ng bulkan?",
+    choices: [
+        "Pagsunod sa hazard map at mga protocol sa kaligtasan",
+        "Pag-asa lamang sa karanasan ng komunidad",
+        "Pananatili sa tahanan kahit may babala",
+        "Pag-iwas sa lahat ng gawaing pangkabuhayan"
+    ],
+    correctAnswer: "A"
+},
+{
+    id: 24,
+    question: "Alin sa sumusunod ang pinakamahusay na pagpapakita ng pagpapahalaga sa likas na yaman?",
+    choices: [
+        "Paggamit ng yaman nang walang limitasyon",
+        "Paggamit ng yaman nang may pananagutan at pag-iingat",
+        "Mabilisang industriyalisasyon",
+        "Pagtuon lamang sa kita"
+    ],
+    correctAnswer: "B"
+},
+{
+    id: 25,
+    question: "Bilang SK Chairperson, alin sa mga sumusunod ang pinakamainam na programang maaari mong buuin upang mapangalagaan ang likas na yaman ng inyong komunidad?",
+    choices: [
+        "Programang nakatuon sa pagpapaunlad ng mga gusali",
+        "Programang nakatuon sa pagpapataas ng produksiyong mineral",
+        "Programang nakatuon sa konserbasyon at rehabilitasyon ng kapaligiran",
+        "Programang nakatuon sa pagpapalawak ng paggamit ng lupain"
+    ],
+    correctAnswer: "C"
+}
+];
+
+const summativeTest2Questions = [];
+
+const examinationQuestions = [];  
+      
+function getTestCode(test) {
+    const testCodes = {
+        unit1: "UT1",
+        unit2: "UT2",
+        unit3: "UT3",
+        unit4: "UT4",
+        unit5: "UT5",
+        summative1: "ST1",
+        summative2: "ST2",
+        exam: "E"
+    };
+
+    return testCodes[test] || test.toUpperCase();
+}      
+
+/* ==================================================
+   TEST DIRECTORY
+   Dito nakalink ang lahat ng tests
+================================================== */      
+      
+const tests = {
+    unit1: {
+        title: "Araling Panlipunan 7 Term 1 Unit Test 1",
+        questions: unitTest1Questions
+    },
+    unit2: {
+        title: "Araling Panlipunan 7 Term 1 Unit Test 2",
+        questions: unitTest2Questions
+    },
+    unit3: {
+        title: "Araling Panlipunan 7 Term 1 Unit Test 3",
+        questions: unitTest3Questions
+    },
+    unit4: {
+        title: "Araling Panlipunan 7 Term 1 Unit Test 4",
+        questions: unitTest4Questions
+    },
+    unit5: {
+        title: "Araling Panlipunan 7 Term 1 Unit Test 5",
+        questions: unitTest5Questions
+    },
+    summative1: {
+        title: "Araling Panlipunan 7 Term 1 Summative Test 1",
+        questions: summativeTest1Questions
+    },
+    summative2: {
+        title: "Araling Panlipunan 7 Term 1 Summative Test 2",
+        questions: summativeTest2Questions
+    },
+    exam: {
+        title: "Araling Panlipunan 7 Term 1 Examination",
+        questions: examinationQuestions
+    }
+};      
+
+/* ==================================================
+   RENDER QUESTIONS
+   Gumagawa ng HTML para sa bawat tanong
+================================================== */      
+      
+function renderQuestions(questionList = []) {
+    const container = document.getElementById("questionsContainer");
+
+    container.innerHTML = "";
+
+    questionList.forEach((question, index) => {
+        const questionBlock = document.createElement("div");
+
+        questionBlock.className = "question-block";
+        questionBlock.dataset.questionId = question.id;
+
+        let choicesHTML = "";
+
+        question.choices.forEach((choice, choiceIndex) => {
+            const letter = String.fromCharCode(65 + choiceIndex);
+            const radioId = `q${question.id}_choice${letter}`;
+
+            choicesHTML += `
+    <label
+        for="${radioId}"
+        class="choice-option"
+        style="
+            display:block;
+            margin:6px 0;
+            padding-left:10px;
+        ">
+        <input
+            type="radio"
+            id="${radioId}"
+            name="question_${question.id}"
+            value="${letter}">
+        ${letter}. ${choice}
+    </label>
+`;
+        });
+
+        questionBlock.innerHTML = `
+    <div
+        class="question-text"
+        style="
+            font-weight:bold;
+            margin-bottom:10px;
+        "
+    >
+        ${index + 1}. ${question.question}
+    </div>
+
+    <div class="question-choices">
+        ${choicesHTML}
+    </div>
+`;
+
+        container.appendChild(questionBlock);
+    });
+}
+      
+        // FUTURE QUESTION LOGIC GO HERE
+      
+let currentQuestions = null;
+
+let shuffledQuestions = [];
+
+let questionOrder = [];
+
+let currentTest = "unit1";
+      
+const testStates = {};      
+ 
+function saveCurrentTestState() {
+
+    if (!currentQuestions || !shuffledQuestions.length) {
+        return;
+    }
+
+    const responses = {};
+
+    shuffledQuestions.forEach(question => {
+
+        const selected = document.querySelector(
+            `input[name="question_${question.id}"]:checked`
+        );
+
+        responses[question.id] =
+            selected ? selected.value : null;
+    });
+
+    testStates[currentTest] = {
+        studentName:
+            document.getElementById("studentName").value,
+
+        gradeSection:
+            document.getElementById("gradeSection").value,
+
+        questionOrder: [...questionOrder],
+
+        choiceOrder: { ...displayedChoiceOrder },
+
+        responses
+    };
+}      
+
+/* ==================================================
+   LOAD SELECTED TEST
+   Babaguhin ang title at questions
+================================================== */      
+      
+function loadTest(testKey){
+
+    saveCurrentTestState();
+
+    currentTest = testKey;
+  
+if(window.innerWidth <= 768){
+    document
+        .querySelector(".test-nav")
+        .classList.remove("show");
+}  
+
+    document
+        .querySelectorAll(".test-nav button")
+        .forEach(btn => btn.classList.remove("active"));
+
+    const activeButton =
+        document.querySelector(
+            `.test-nav button[onclick="loadTest('${testKey}')"]`
+        );
+
+    if(activeButton){
+        activeButton.classList.add("active");
+    }
+
+    const selectedTest = tests[testKey];
+
+    document.getElementById("examTitle").textContent =
+        selectedTest.title;
+
+    currentQuestions = selectedTest.questions;
+
+    const questionsContainer =
+        document.getElementById("questionsContainer");
+
+    const studentInfo =
+        document.querySelector(".student-info");
+
+    const scoreSection =
+        document.querySelector(".score-section");
+
+    const submissionBar =
+        document.querySelector(".submission-bar");
+
+    if(
+        !currentQuestions ||
+        currentQuestions.length === 0
+    ){
+
+        studentInfo.style.display = "none";
+        scoreSection.style.display = "none";
+        submissionBar.style.display = "none";
+
+        questionsContainer.innerHTML = `
+            <div style="
+                text-align:center;
+                padding:60px;
+                font-size:28px;
+                font-weight:bold;
+                color:#666;
+            ">
+                Updating...
+            </div>
+        `;
+
+        return;
+    }
+
+    studentInfo.style.display = "";
+    scoreSection.style.display = "";
+    submissionBar.style.display = "";
+
+    const savedState = testStates[testKey];
+
+if(savedState){
+
+    questionOrder =
+        [...savedState.questionOrder];
+
+    displayedChoiceOrder =
+        {...savedState.choiceOrder};
+
+    shuffledQuestions =
+        questionOrder.map(questionId => {
+
+            const originalQuestion =
+                currentQuestions.find(
+                    q => q.id === Number(questionId)
+                );
+
+            const originalLetters =
+                ["A","B","C","D"];
+
+            const storedValue =
+                displayedChoiceOrder[questionId];
+
+            const patternIndex =
+                PATTERN_CHARS.indexOf(storedValue);
+
+            const arrangement =
+                CHOICE_PATTERNS[patternIndex];
+
+            const reconstructedChoices =
+                arrangement.split("")
+                .map(letter => {
+
+                    const originalIndex =
+                        originalLetters.indexOf(letter);
+
+                    return originalQuestion.choices[
+                        originalIndex
+                    ];
+                });
+
+            const newCorrectAnswerIndex =
+                arrangement.indexOf(
+                    originalQuestion.correctAnswer
+                );
+
+            return {
+                ...originalQuestion,
+                choices: reconstructedChoices,
+                correctAnswer:
+                    String.fromCharCode(
+                        65 + newCorrectAnswerIndex
+                    )
+            };
+        });
+
+    renderQuestions(shuffledQuestions);
+
+    Object.entries(
+        savedState.responses
+    ).forEach(([questionId, answer]) => {
+
+        if(!answer){
+            return;
+        }
+
+        const radio =
+            document.querySelector(
+                `input[name="question_${questionId}"][value="${answer}"]`
+            );
+
+        if(radio){
+            radio.checked = true;
+        }
+    });
+
+    document.getElementById(
+        "studentName"
+    ).value =
+        savedState.studentName || "";
+
+    document.getElementById(
+        "gradeSection"
+    ).value =
+        savedState.gradeSection || "";
+
+    return;
+}
+
+
+initializeQuestionOrder();
+renderQuestions(shuffledQuestions);
+updateTotalItems();
+}     
+
+/* ==================================================
+   RANDOMIZE QUESTIONS
+   Fisher-Yates Shuffle Algorithm
+================================================== */      
+      
+function fisherYatesShuffle(array) {
+    const shuffled = [...array];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled;
+}
+
+      let displayedChoiceOrder = {};
+
+const CHOICE_PATTERNS = [
+    "ABCD",
+    "ABDC",
+    "ACBD",
+    "ACDB",
+    "ADBC",
+    "ADCB",
+    "BACD",
+    "BADC",
+    "BCAD",
+    "BCDA",
+    "BDAC",
+    "BDCA",
+    "CABD",
+    "CADB",
+    "CBAD",
+    "CBDA",
+    "CDAB",
+    "CDBA",
+    "DABC",
+    "DACB",
+    "DBAC",
+    "DBCA",
+    "DCAB",
+    "DCBA"
+];
+      
+      const PATTERN_CHARS =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+/* ==================================================
+   RANDOMIZE CHOICES A-B-C-D
+================================================== */      
+      
+function shuffleQuestionChoices(questionList) {
+    return questionList.map(question => {
+        const choiceObjects = question.choices.map((choice, index) => ({
+            text: choice,
+            letter: String.fromCharCode(65 + index)
+        }));
+
+        const shuffledChoices = fisherYatesShuffle(choiceObjects);
+
+        const arrangement =
+    shuffledChoices.map(item => item.letter).join("");
+
+const patternIndex =
+    CHOICE_PATTERNS.indexOf(arrangement);
+
+displayedChoiceOrder[question.id] =
+    PATTERN_CHARS[patternIndex];
+
+        const newCorrectAnswerIndex = shuffledChoices.findIndex(
+            item => item.letter === question.correctAnswer
+        );
+
+        return {
+            ...question,
+            choices: shuffledChoices.map(item => item.text),
+            correctAnswer: String.fromCharCode(
+                65 + newCorrectAnswerIndex
+            )
+        };
+    });
+}
+      
+function initializeQuestionOrder() {
+    shuffledQuestions =
+        fisherYatesShuffle(currentQuestions);
+shuffledQuestions = shuffleQuestionChoices(shuffledQuestions);
+
+    questionOrder = shuffledQuestions.map(question => question.id);
+}
+
+        // FUTURE SCORING LOGIC GO HERE
+
+        // FUTURE SAVE/LOAD FUNCTIONS GO HERE
+
+/* ==================================================
+   SAVE STUDENT ANSWERS
+   Nagva-validate at nagda-download ng JSON file
+================================================== */      
+      
+function saveResponses() {
+
+    const studentNameInput =
+        document.getElementById("studentName");
+
+    const gradeSectionInput =
+        document.getElementById("gradeSection");
+
+studentNameInput.classList.remove("error-highlight");
+gradeSectionInput.classList.remove("error-highlight");
+
+document.querySelectorAll(".question-error")
+    .forEach(q => q.classList.remove("question-error"));
+
+let hasError = false;
+let firstErrorElement = null;
+
+// Student Name
+if (!studentNameInput.value.trim()) {
+    studentNameInput.classList.add("error-highlight");
+
+    if (!firstErrorElement) {
+        firstErrorElement = studentNameInput;
+    }
+
+    hasError = true;
+}
+
+// Grade & Section
+if (!gradeSectionInput.value.trim()) {
+    gradeSectionInput.classList.add("error-highlight");
+
+    if (!firstErrorElement) {
+        firstErrorElement = gradeSectionInput;
+    }
+
+    hasError = true;
+}
+
+// Questions
+for (const question of shuffledQuestions) {
+
+    const selected = document.querySelector(
+        `input[name="question_${question.id}"]:checked`
+    );
+
+    if (!selected) {
+
+        const questionBlock = document.querySelector(
+            `[data-question-id="${question.id}"]`
+        );
+
+        if (questionBlock) {
+            questionBlock.classList.add("question-error");
+        }
+
+        if (!firstErrorElement) {
+            firstErrorElement = questionBlock;
+        }
+
+        hasError = true;
+    }
+}
+
+if (hasError) {
+
+    firstErrorElement.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+    return;
+}
+
+document.querySelectorAll(".question-error")
+    .forEach(q => q.classList.remove("question-error"));
+
+let firstBlankQuestion = null;
+let hasBlankQuestion = false;
+
+for (const question of shuffledQuestions) {
+
+    const selected = document.querySelector(
+        `input[name="question_${question.id}"]:checked`
+    );
+
+    if (!selected) {
+
+        const questionBlock = document.querySelector(
+            `[data-question-id="${question.id}"]`
+        );
+
+        if (questionBlock) {
+            questionBlock.classList.add("question-error");
+        }
+
+        if (!firstBlankQuestion) {
+            firstBlankQuestion = questionBlock;
+        }
+
+        hasBlankQuestion = true;
+    }
+}
+
+if (hasBlankQuestion) {
+
+    firstBlankQuestion.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+    return;
+}
+
+    const studentName =
+        studentNameInput.value.trim();
+
+    const gradeSection =
+        gradeSectionInput.value.trim();
+
+    const responses = {};
+
+    shuffledQuestions.forEach(question => {
+        const selected = document.querySelector(
+            `input[name="question_${question.id}"]:checked`
+        );
+
+        responses[question.id] = selected ? selected.value : null;
+    });
+
+const exportData = {
+    test: currentTest,
+    studentName,
+    gradeSection,
+    timestamp: new Date().toISOString(),
+    questionOrder,
+    choiceOrder: displayedChoiceOrder,
+    responses
+};
+
+let cleanStudent =
+    studentName
+        .replace(/[^\w\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "_");
+
+let cleanSection =
+    gradeSection
+        .replace(/[^\w\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "_");
+
+if (!cleanStudent) {
+    cleanStudent = "Student";
+}
+
+if (!cleanSection) {
+    cleanSection = "Section";
+}
+
+const testCode = getTestCode(currentTest);
+
+let filename =
+    `${cleanStudent}_${cleanSection}_${testCode}.json`;
+
+    const blob = new Blob(
+        [JSON.stringify(exportData, null, 2)],
+        { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+lockTest(exportData);
+}
+
+/* ==================================================
+   SAVE REVIEW FILE
+   Para sa teacher checking
+================================================== */      
+      
+function saveReviewFile() {
+    const studentName =
+        document.getElementById("studentName")
+        .value.trim();
+
+    const gradeSection =
+        document.getElementById("gradeSection")
+        .value.trim();
+
+    if (!studentName) {
+        alert("Please enter the Student Name.");
+        return;
+    }
+
+    if (!gradeSection) {
+        alert("Please enter the Grade & Section.");
+        return;
+    }
+
+    const responses = {};
+
+    shuffledQuestions.forEach(question => {
+        const selected = document.querySelector(
+            `input[name="question_${question.id}"]:checked`
+        );
+
+        responses[question.id] =
+            selected ? selected.value : null;
+    });
+
+    const exportData = {
+        test: currentTest,
+        studentName,
+        gradeSection,
+        timestamp: new Date().toISOString(),
+        questionOrder,
+        choiceOrder: displayedChoiceOrder,
+        responses
+    };
+
+    let cleanStudent =
+        studentName
+            .replace(/[^\w\s-]/g, "")
+            .trim()
+            .replace(/\s+/g, "_");
+
+    let cleanSection =
+        gradeSection
+            .replace(/[^\w\s-]/g, "")
+            .trim()
+            .replace(/\s+/g, "_");
+
+const testCode = getTestCode(currentTest);
+
+const filename =
+    `${cleanStudent}_${cleanSection}_${testCode}_Review.json`;
+
+    const blob = new Blob(
+        [JSON.stringify(exportData, null, 2)],
+        { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+
+    showSaveSuccess(exportData);
+}
+
+function showSaveSuccess(exportData) {
+
+    const examCard =
+        document.querySelector(".exam-card");
+
+    examCard.innerHTML = `
+        <div style="
+            text-align:center;
+            padding:50px 20px;
+        ">
+            <h2 style="
+                color:#2e7d32;
+                margin-bottom:15px;
+            ">
+                ✅ Review File Saved Successfully
+            </h2>
+
+            <p style="
+                margin-bottom:25px;
+            ">
+                JSON file has been saved.
+                Teacher may scan the QR code below.
+            </p>
+
+            <div id="reviewQrCode"
+                 style="
+                    display:flex;
+                    justify-content:center;
+                    margin-bottom:20px;
+                 ">
+            </div>
+
+            <button
+                onclick="location.reload()"
+                style="
+                    padding:12px 24px;
+                    border:none;
+                    border-radius:6px;
+                    background:#1f4e79;
+                    color:white;
+                    cursor:pointer;
+                ">
+                Return
+            </button>
+        </div>
+    `;
+
+    const qrPayload = JSON.stringify({
+        t: exportData.test,
+        n: exportData.studentName,
+        g: exportData.gradeSection,
+        q: exportData.questionOrder.join(","),
+        c: exportData.questionOrder
+            .map(id => exportData.choiceOrder[id])
+            .join(""),
+        r: exportData.responses
+    });
+
+    new QRCode(
+        document.getElementById("reviewQrCode"),
+        {
+            text: qrPayload,
+            width: 250,
+            height: 250,
+            typeNumber: 20
+        }
+    );
+}      
+
+      const TEST_LOCK_STORAGE_KEY = "offlineExamLocked";
+
+/* ==================================================
+   LOCK EXAM AFTER SUBMISSION
+   Hindi na maaaring baguhin ang sagot
+================================================== */      
+      
+function lockTest(exportData) {
+
+    document
+        .querySelectorAll('input[type="radio"]')
+        .forEach(radio => {
+            radio.disabled = true;
+        });
+
+    document.getElementById("studentName").disabled = true;
+    document.getElementById("gradeSection").disabled = true;
+
+    saveResponsesBtn.disabled = true;
+
+    const examCard = document.querySelector(".exam-card");
+
+    examCard.innerHTML = `
+    <div style="
+        text-align:center;
+        padding:60px 20px;
+    ">
+
+        <h1 style="
+            color:#2e7d32;
+            margin-bottom:20px;
+        ">
+            ✓ Submission Successful
+        </h1>
+
+        <div id="qrCode"
+             style="
+                display:flex;
+                justify-content:center;
+                margin:25px 0;
+             ">
+        </div>
+
+        <p style="
+            color:#666;
+            margin-bottom:30px;
+        ">
+            Teacher may scan the QR code.
+        </p>
+
+        <button
+            id="newResponseBtn"
+            style="
+                padding:12px 24px;
+                background:#1f4e79;
+                color:white;
+                border:none;
+                border-radius:6px;
+                cursor:pointer;
+            ">
+            Start New Examinee
+        </button>
+
+    </div>
+`;
+  
+const qrPayload = JSON.stringify({
+    t: exportData.test,
+    n: exportData.studentName,
+    g: exportData.gradeSection,
+    q: exportData.questionOrder.join(","),
+    c: exportData.questionOrder
+        .map(id => exportData.choiceOrder[id])
+        .join(""),
+    r: exportData.responses
+});
+
+console.log(
+    "QR Payload Length:",
+    qrPayload.length
+);
+
+new QRCode(
+    document.getElementById("qrCode"),
+    {
+        text: qrPayload,
+        width: 250,
+        height: 250,
+        typeNumber: 20
+    }
+);
+
+    document
+        .getElementById("newResponseBtn")
+        .addEventListener(
+            "click",
+            submitAnotherResponse
+        );
+
+    localStorage.setItem(
+        TEST_LOCK_STORAGE_KEY,
+        "true"
+    );
+}
+
+
+function restoreLockState() {
+    const isLocked =
+        localStorage.getItem(TEST_LOCK_STORAGE_KEY) === "true";
+
+    if (isLocked) {
+        localStorage.removeItem(TEST_LOCK_STORAGE_KEY);
+    }
+}
+
+
+restoreLockState();
+      
+      let loadedExamData = null;
+
+
+function displayLoadedQRCode(qrData) {
+
+    // Skip QR display if QR library is unavailable
+    if (typeof QRCode === "undefined") {
+        console.warn("QRCode library not loaded.");
+        return;
+    }
+
+    const container =
+        document.getElementById("loadedQrContainer");
+
+    const qrTarget =
+        document.getElementById("loadedQrCode");
+
+    qrTarget.innerHTML = "";
+    container.style.display = "block";
+
+    new QRCode(qrTarget, {
+        text: JSON.stringify(qrData),
+        width: 250,
+        height: 250
+    });
+}      
+
+
+/* ==================================================
+   LOAD SAVED EXAM FILE
+   Reconstructs shuffled questions and answers
+================================================== */      
+      
+function loadExamFromJSON(file) {
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+
+        try {
+
+            loadedExamData =
+                JSON.parse(event.target.result);
+          
+if (loadedExamData.test) {
+    loadTest(loadedExamData.test);
+}
+else {
+    loadTest("unit1");
+}         
+          
+const qrPayload = {
+    t: loadedExamData.test,
+    n: loadedExamData.studentName,
+    g: loadedExamData.gradeSection,
+    q: loadedExamData.questionOrder.join(","),
+    c: loadedExamData.questionOrder
+        .map(id => {
+            const value =
+                loadedExamData.choiceOrder[id];
+
+            if (Array.isArray(value)) {
+                return PATTERN_CHARS[
+                    CHOICE_PATTERNS.indexOf(
+                        value.join("")
+                    )
+                ];
+            }
+
+            return value;
+        })
+        .join(""),
+    r: loadedExamData.responses
+};
+
+displayLoadedQRCode(qrPayload);
+
+            if (
+                !loadedExamData.questionOrder ||
+                !loadedExamData.choiceOrder ||
+                !loadedExamData.responses
+            ) {
+                throw new Error(
+                    "Not a valid exam file."
+                );
+            }
+
+
+    } catch (error) {
+
+        alert(
+            "Invalid or corrupted JSON file."
+        );
+
+        console.error(error);
+
+        return;
+    }
+
+        questionOrder = [...loadedExamData.questionOrder];
+        displayedChoiceOrder = { ...loadedExamData.choiceOrder };
+
+        shuffledQuestions = questionOrder.map(questionId => {
+            const originalQuestion = currentQuestions.find(
+                q => q.id === Number(questionId)
+            );
+
+            const originalLetters = ["A", "B", "C", "D"];
+
+const storedValue =
+    displayedChoiceOrder[questionId];
+
+let patternIndex;
+
+if (Array.isArray(storedValue)) {
+
+    patternIndex =
+        CHOICE_PATTERNS.indexOf(
+            storedValue.join("")
+        );
+
+} else {
+
+    patternIndex =
+        PATTERN_CHARS.indexOf(
+            storedValue
+        );
+
+}
+
+const arrangement =
+    CHOICE_PATTERNS[patternIndex];
+
+if (!arrangement) {
+
+    console.error(
+        "Invalid choice pattern:",
+        questionId,
+        displayedChoiceOrder[questionId]
+    );
+
+    return originalQuestion;
+}
+
+const reconstructedChoices =
+    arrangement.split("").map(letter => {
+                    const originalIndex =
+                        originalLetters.indexOf(letter);
+
+                    return originalQuestion.choices[originalIndex];
+                });
+
+            const newCorrectAnswerIndex =
+    arrangement.indexOf(
+        originalQuestion.correctAnswer
+    );
+
+            return {
+                ...originalQuestion,
+                choices: reconstructedChoices,
+                correctAnswer: String.fromCharCode(
+                    65 + newCorrectAnswerIndex
+                )
+            };
+        });
+
+        renderQuestions(shuffledQuestions);
+      updateTotalItems();
+
+        Object.entries(loadedExamData.responses).forEach(
+            ([questionId, answer]) => {
+                if (!answer) return;
+
+                const radio = document.querySelector(
+                    `input[name="question_${questionId}"][value="${answer}"]`
+                );
+
+                if (radio) {
+                    radio.checked = true;
+                }
+            }
+        );
+
+        document.getElementById("studentName").value =
+            loadedExamData.studentName || "";
+
+        document.getElementById("gradeSection").value =
+    loadedExamData.gradeSection || "";
+      
+      reviewModeUnlocked = true;
+
+document.getElementById(
+    "questionsContainer"
+).style.display = "none";
+
+const submissionBar =
+    document.querySelector(".submission-bar");
+
+if (submissionBar) {
+    submissionBar.style.display = "none";
+}
+
+let reviewSection =
+    document.getElementById("reviewSection");
+
+if (!reviewSection) {
+
+    reviewSection =
+        document.createElement("div");
+
+    reviewSection.id = "reviewSection";
+
+    reviewSection.style.marginTop = "20px";
+    reviewSection.style.padding = "15px";
+    reviewSection.style.border = "1px solid #ccc";
+    reviewSection.style.borderRadius = "8px";
+    reviewSection.style.backgroundColor = "#f8f9fa";
+
+    document
+        .getElementById("questionsContainer")
+        .insertAdjacentElement(
+            "afterend",
+            reviewSection
+        );
+}
+
+reviewSection.style.display = "block";
+
+buildReviewResults();
+
+    };
+
+    reader.readAsText(file);
+}
+      
+        // FUTURE SVG EXPORT FUNCTIONS GO HERE
+      
+      function exportReviewHTML() {
+
+    const studentName =
+        document.getElementById("studentName").value || "";
+
+    const gradeSection =
+        document.getElementById("gradeSection").value || "";
+
+    const scoreText =
+        document.getElementById("scoreValue").textContent || "0";
+
+    let reviewHTML = "";
+
+    shuffledQuestions.forEach((question, index) => {
+
+        const selectedRadio = document.querySelector(
+            `input[name="question_${question.id}"]:checked`
+        );
+
+        const studentAnswer =
+            selectedRadio ? selectedRadio.value : null;
+
+        let choicesHTML = "";
+
+        question.choices.forEach((choice, choiceIndex) => {
+
+            const letter = String.fromCharCode(65 + choiceIndex);
+
+            let marker = "";
+
+            if (letter === question.correctAnswer) {
+                marker =
+                    '<span class="correct">✓</span>';
+            }
+
+            if (
+                studentAnswer &&
+                studentAnswer !== question.correctAnswer &&
+                letter === studentAnswer
+            ) {
+                marker =
+                    '<span class="wrong">✗</span>';
+            }
+
+            choicesHTML += `
+                <div class="choice">
+                    ${letter}. ${choice} ${marker}
+                </div>
+            `;
+        });
+
+        reviewHTML += `
+            <div class="question">
+                <div class="question-title">
+                    ${index + 1}. ${question.question}
+                </div>
+
+                ${choicesHTML}
+            </div>
+        `;
+    });
+
+const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Araling Panlipunan 7 Unit Test</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    max-width:1000px;
+    margin:auto;
+    padding:20px;
+}
+
+.header{
+    border-bottom:2px solid #ddd;
+    padding-bottom:15px;
+    margin-bottom:25px;
+    text-align:center;
+}
+
+.info{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    margin-top:15px;
+}
+
+.info div{
+    text-align:left;
+}
+
+@media (max-width: 768px){
+
+    .info{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+
+}
+
+.question{
+    background:#fafafa;
+    border-radius:8px;
+    padding:12px;
+    margin-bottom:20px;
+    border-bottom:1px solid #ddd;
+}
+
+.question-title{
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.choice{
+    margin:4px 0;
+}
+
+.correct{
+    color:green;
+    font-weight:bold;
+}
+
+.wrong{
+    color:red;
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+    <h2>${document.getElementById("examTitle").textContent} Result</h2>
+
+    <div class="info">
+        <div>
+    <strong>Name:</strong> ${studentName}
+</div>
+
+<div>
+    <strong>Grade & Section:</strong> ${gradeSection}
+</div>
+
+<div>
+    <strong>Score:</strong> ${scoreText} / ${shuffledQuestions.length}
+</div>
+    </div>
+</div>
+
+${reviewHTML}
+
+</body>
+</html>
+`;
+
+    const blob = new Blob(
+        [htmlContent],
+        { type: "text/html" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+let cleanStudent =
+    studentName
+        .replace(/[^\w\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "_");
+
+let cleanSection =
+    gradeSection
+        .replace(/[^\w\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "_");
+
+if (!cleanStudent) {
+    cleanStudent = "Student";
+}
+
+if (!cleanSection) {
+    cleanSection = "Section";
+}
+
+const testCode = getTestCode(currentTest);
+
+const filename =
+    `${cleanStudent}_${cleanSection}_${testCode}.html`;
+
+    link.href = url;
+    link.download = filename;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+}
+      
+      const REVIEW_PASSWORD = "313325";
+let reviewModeUnlocked = false;
+
+      
+      
+      function verifyTeacherAccess() {
+
+    const enteredPassword = prompt(
+        "Enter password:"
+    );
+
+    if (enteredPassword !== REVIEW_PASSWORD) {
+
+        alert("Incorrect password.");
+
+        return false;
+    }
+
+    return true;
+}
+      
+function exportReviewHTMLProtected() {
+
+    const studentNameInput =
+        document.getElementById("studentName");
+
+    const gradeSectionInput =
+        document.getElementById("gradeSection");
+
+studentNameInput.classList.remove("error-highlight");
+gradeSectionInput.classList.remove("error-highlight");
+
+document.querySelectorAll(".question-error")
+    .forEach(q => q.classList.remove("question-error"));
+
+let hasError = false;
+let firstErrorElement = null;
+
+// Student Name
+if (!studentNameInput.value.trim()) {
+    studentNameInput.classList.add("error-highlight");
+
+    if (!firstErrorElement) {
+        firstErrorElement = studentNameInput;
+    }
+
+    hasError = true;
+}
+
+// Grade & Section
+if (!gradeSectionInput.value.trim()) {
+    gradeSectionInput.classList.add("error-highlight");
+
+    if (!firstErrorElement) {
+        firstErrorElement = gradeSectionInput;
+    }
+
+    hasError = true;
+}
+
+// Questions
+for (const question of shuffledQuestions) {
+
+    const selected = document.querySelector(
+        `input[name="question_${question.id}"]:checked`
+    );
+
+    if (!selected) {
+
+        const questionBlock = document.querySelector(
+            `[data-question-id="${question.id}"]`
+        );
+
+        if (questionBlock) {
+            questionBlock.classList.add("question-error");
+        }
+
+        if (!firstErrorElement) {
+            firstErrorElement = questionBlock;
+        }
+
+        hasError = true;
+    }
+}
+
+if (hasError) {
+
+    firstErrorElement.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+    return;
+}
+
+document.querySelectorAll(".question-error")
+    .forEach(q => q.classList.remove("question-error"));
+
+let firstBlankQuestion = null;
+let hasBlankQuestion = false;
+
+for (const question of shuffledQuestions) {
+
+    const selected = document.querySelector(
+        `input[name="question_${question.id}"]:checked`
+    );
+
+    if (!selected) {
+
+        const questionBlock = document.querySelector(
+            `[data-question-id="${question.id}"]`
+        );
+
+        if (questionBlock) {
+            questionBlock.classList.add("question-error");
+        }
+
+        if (!firstBlankQuestion) {
+            firstBlankQuestion = questionBlock;
+        }
+
+        hasBlankQuestion = true;
+    }
+}
+
+if (hasBlankQuestion) {
+
+    firstBlankQuestion.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+    return;
+}
+
+    exportReviewHTML();
+    closeAdminDropdown();
+}
+      
+
+function unlockReviewMode() {
+    reviewModeUnlocked = true;
+
+
+    let reviewSection = document.getElementById("reviewSection");
+
+    if (!reviewSection) {
+        reviewSection = document.createElement("div");
+        reviewSection.id = "reviewSection";
+        reviewSection.style.marginTop = "20px";
+        reviewSection.style.padding = "15px";
+        reviewSection.style.border = "1px solid #ccc";
+        reviewSection.style.borderRadius = "8px";
+        reviewSection.style.backgroundColor = "#f8f9fa";
+
+        reviewSection.innerHTML = "";
+
+        document
+            .getElementById("questionsContainer")
+            .insertAdjacentElement("afterend", reviewSection);
+    }
+
+    reviewSection.style.display = "block";
+
+document.getElementById(
+    "questionsContainer"
+).style.display = "none";
+
+const submissionBar =
+    document.querySelector(".submission-bar");
+
+if (submissionBar) {
+    submissionBar.style.display = "none";
+}
+
+buildReviewResults();
+  closeAdminDropdown();
+}
+
+
+/* ==================================================
+   REVIEW MODE
+   Ipinapakita ang tama at maling sagot
+================================================== */      
+      
+function buildReviewResults() {
+    if (!reviewModeUnlocked) {
+        return;
+    }
+
+    let totalScore = 0;
+
+    const reviewSection = document.getElementById("reviewSection");
+
+    reviewSection.innerHTML = "";
+
+    shuffledQuestions.forEach((question, index) => {
+        const selectedRadio = document.querySelector(
+            `input[name="question_${question.id}"]:checked`
+        );
+
+        const studentAnswer = selectedRadio
+            ? selectedRadio.value
+            : null;
+
+        const isCorrect =
+            studentAnswer === question.correctAnswer;
+
+        if (isCorrect) {
+            totalScore++;
+        }
+
+        const reviewItem = document.createElement("div");
+
+        reviewItem.style.marginBottom = "20px";
+        reviewItem.style.padding = "10px";
+        reviewItem.style.borderBottom = "1px solid #ddd";
+
+        let choicesHTML = "";
+
+        question.choices.forEach((choice, choiceIndex) => {
+            const letter = String.fromCharCode(65 + choiceIndex);
+
+            let marker = "";
+
+            if (letter === question.correctAnswer) {
+                marker =
+                    ' <span style="color:green;font-weight:bold;">✓</span>';
+            }
+
+            if (
+                studentAnswer &&
+                letter === studentAnswer &&
+                studentAnswer !== question.correctAnswer
+            ) {
+                marker =
+                    ' <span style="color:red;font-weight:bold;">✗</span>';
+            }
+
+            choicesHTML += `
+                <div style="margin:4px 0;">
+                    ${letter}. ${choice}${marker}
+                </div>
+            `;
+        });
+
+        reviewItem.innerHTML = `
+            <div style="font-weight:bold;margin-bottom:8px;">
+                ${index + 1}. ${question.question}
+            </div>
+            ${choicesHTML}
+        `;
+
+        reviewSection.appendChild(reviewItem);
+    });
+
+    const scoreElement = document.getElementById("scoreValue");
+
+    if (scoreElement) {
+        scoreElement.textContent = totalScore;
+    }
+}
+      
+function submitAnotherResponse() {
+
+    const qrContainer =
+        document.getElementById(
+            "loadedQrContainer"
+        );
+
+    if (qrContainer) {
+        qrContainer.style.display = "none";
+    }
+
+    localStorage.removeItem(
+        TEST_LOCK_STORAGE_KEY
+    );
+
+    reviewModeUnlocked = false;
+
+    location.reload();
+}
+
+
+/* ==================================================
+   REBUILD EXAM FROM QR DATA
+================================================== */      
+      
+function recreateTestFromPaste() {
+
+    const pastedText =
+        document.getElementById(
+            "qrPasteInput"
+        ).value.trim();
+
+    if (!pastedText) {
+
+        alert(
+            "Please paste QR data first."
+        );
+
+        return;
+    }
+
+    try {
+
+        const qrData =
+            JSON.parse(pastedText);
+      
+if (qrData.t) {
+    loadTest(qrData.t);
+}
+else {
+    loadTest("unit1");
+}     
+
+        const rebuiltChoiceOrder = {};
+
+        qrData.q
+            .split(",")
+            .forEach((questionId, index) => {
+
+                rebuiltChoiceOrder[
+                    Number(questionId)
+                ] = qrData.c[index];
+            });
+
+loadedExamData = {
+    studentName: qrData.n,
+    gradeSection: qrData.g,
+    questionOrder: qrData.q.split(",").map(Number),
+    choiceOrder: rebuiltChoiceOrder,
+    responses: qrData.r
+};
+
+try {
+    displayLoadedQRCode(qrData);
+} catch (e) {
+    console.log("QR preview skipped:", e);
+}
+
+loadRecreatedExam(
+    loadedExamData
+);
+
+    } 
+        
+catch(error) {
+    console.error(error);
+    alert(error.message);
+}
+
+        
+}
+      
+      function loadRecreatedExam(
+    loadedExamData
+) {
+
+    questionOrder =
+        [...loadedExamData.questionOrder];
+
+    displayedChoiceOrder =
+        {...loadedExamData.choiceOrder};
+
+    shuffledQuestions =
+        questionOrder.map(questionId => {
+
+            const originalQuestion =
+                currentQuestions.find(
+                    q => q.id === Number(
+                        questionId
+                    )
+                );
+
+            const originalLetters =
+                ["A","B","C","D"];
+
+const storedValue =
+    displayedChoiceOrder[questionId];
+
+let patternIndex;
+
+if (Array.isArray(storedValue)) {
+
+    patternIndex =
+        CHOICE_PATTERNS.indexOf(
+            storedValue.join("")
+        );
+
+} else {
+
+    patternIndex =
+        PATTERN_CHARS.indexOf(
+            storedValue
+        );
+
+}
+
+const arrangement =
+    CHOICE_PATTERNS[patternIndex];
+      
+      if (!arrangement) {
+
+    console.error(
+        "Invalid choice pattern:",
+        questionId,
+        displayedChoiceOrder[questionId]
+    );
+
+    return originalQuestion;
+}
+
+            const reconstructedChoices =
+                arrangement.split("")
+                .map(letter => {
+
+                    const originalIndex =
+                        originalLetters.indexOf(
+                            letter
+                        );
+
+                    return originalQuestion
+                        .choices[
+                            originalIndex
+                        ];
+                });
+
+            const newCorrectAnswerIndex =
+                arrangement.indexOf(
+                    originalQuestion
+                    .correctAnswer
+                );
+
+            return {
+
+                ...originalQuestion,
+
+                choices:
+                    reconstructedChoices,
+
+                correctAnswer:
+                    String.fromCharCode(
+                        65 +
+                        newCorrectAnswerIndex
+                    )
+            };
+        });
+
+    renderQuestions(
+        shuffledQuestions
+    );
+        
+    updateTotalItems();
+    
+
+    Object.entries(
+        loadedExamData.responses
+    ).forEach(([questionId, answer]) => {
+
+        const radio =
+            document.querySelector(
+                `input[name="question_${questionId}"][value="${answer}"]`
+            );
+
+        if (radio) {
+
+            radio.checked = true;
+
+        }
+    });
+
+    document.getElementById(
+        "studentName"
+    ).value =
+        loadedExamData.studentName;
+
+    document.getElementById(
+        "gradeSection"
+    ).value =
+        loadedExamData.gradeSection;
+
+    adminDropdownContent.style.display =
+        "none";
+
+reviewModeUnlocked = true;
+
+unlockReviewMode();
+
+// Clear the QR paste textbox
+document.getElementById("qrPasteInput").value = "";
+}
+  
+const mobileMenuBtn =
+    document.getElementById("mobileMenuBtn");
+
+mobileMenuBtn.addEventListener(
+    "click",
+    () => {
+
+        document
+            .querySelector(".test-nav")
+            .classList.toggle("show");
+
+    }
+);      
+
+const studentNameInput = document.getElementById("studentName");
+const gradeSectionInput = document.getElementById("gradeSection");
+
+function convertToUppercase(event) {
+    event.target.value = event.target.value.toUpperCase();
+}
+
+studentNameInput.addEventListener("input", convertToUppercase);
+gradeSectionInput.addEventListener("input", convertToUppercase);
+      
+studentNameInput.addEventListener("input", () => {
+    studentNameInput.classList.remove("error-highlight");
+});
+
+gradeSectionInput.addEventListener("input", () => {
+    gradeSectionInput.classList.remove("error-highlight");
+});
+      
+document.addEventListener("change", (e) => {
+    if (e.target.type === "radio") {
+        const questionBlock = e.target.closest(".question-block");
+        if (questionBlock) {
+            questionBlock.classList.remove("question-error");
+        }
+    }
+});
+  
+function updateTotalItems(){
+    const totalItemsElement =
+        document.getElementById("totalItemsValue");
+
+    if(totalItemsElement){
+        totalItemsElement.textContent =
+            shuffledQuestions.length;
+    }
+}      
+
+
+/* ==================================================
+   GENERATE PRINTABLE ANSWER SHEET
+   May score, QR code, at answer summary
+================================================== */      
+      
+function showAnswerSheet(){
+
+    if(!shuffledQuestions.length){
+        return;
+    }
+
+    let score = 0;
+
+    shuffledQuestions.forEach(question => {
+
+        const selected =
+            document.querySelector(
+                `input[name="question_${question.id}"]:checked`
+            );
+
+        if(
+            selected &&
+            selected.value === question.correctAnswer
+        ){
+            score++;
+        }
+    });
+
+    let answerSheetSection =
+        document.getElementById("answerSheetSection");
+
+    if(!answerSheetSection){
+
+        answerSheetSection =
+            document.createElement("div");
+
+        answerSheetSection.id =
+            "answerSheetSection";
+
+        document
+            .getElementById("questionsContainer")
+            .insertAdjacentElement(
+                "afterend",
+                answerSheetSection
+            );
+    }
+
+    const totalItems =
+        shuffledQuestions.length;
+
+    const splitPoint =
+        Math.ceil(totalItems / 2);
+
+    const column1 =
+        shuffledQuestions.slice(0, splitPoint);
+
+    const column2 =
+        shuffledQuestions.slice(splitPoint);
+
+    function buildColumn(items, startIndex){
+
+        return items.map((question,index) => {
+
+            const selected =
+                document.querySelector(
+                    `input[name="question_${question.id}"]:checked`
+                );
+
+            const studentAnswer =
+                selected
+                ? selected.value
+                : "";
+
+            const isCorrect =
+                studentAnswer === question.correctAnswer;
+
+            return `
+            <div class="answer-item">
+
+                <div class="answer-row">
+
+<div class="answer-number">
+
+    <span class="student-number">
+        ${startIndex + index}
+    </span>
+
+    <span class="original-number">
+        (${question.id})
+    </span>
+
+</div>
+
+<span class="answer-choice ${studentAnswer==='A' ? 'selected' : ''}">
+    A
+</span>
+
+<span class="answer-choice ${studentAnswer==='B' ? 'selected' : ''}">
+    B
+</span>
+
+<span class="answer-choice ${studentAnswer==='C' ? 'selected' : ''}">
+    C
+</span>
+
+<span class="answer-choice ${studentAnswer==='D' ? 'selected' : ''}">
+    D
+</span>
+
+                    ${
+                        isCorrect
+                        ? '<span class="correct-mark">✓</span>'
+                        : '<span class="wrong-mark">✗</span>'
+                    }
+
+                </div>
+
+            </div>
+            `;
+
+        }).join("");
+    }
+
+    answerSheetSection.innerHTML = `
+    
+<div class="answer-sheet-paper">    
+
+<div class="answer-header">
+
+    <div class="answer-title">
+        ${document.getElementById("examTitle").textContent}
+    </div>
+
+<br />
+
+    <div class="answer-info">
+
+        <div>
+            Name:
+            ${document.getElementById("studentName").value}
+        </div>
+
+        <div>
+            Grade & Section:
+            ${document.getElementById("gradeSection").value}
+        </div>
+
+        <div>
+            Score:
+            ${score} / ${totalItems}
+        </div>
+
+    </div>
+
+</div>
+
+<div class="answer-sheet-grid">
+    <div>
+        ${buildColumn(column1,1)}
+    </div>
+    <div>
+        ${buildColumn(column2, splitPoint + 1)}
+    </div>
+</div>
+
+<div class="answer-footer">
+<div class="footer-step">
+    <p>
+        <strong>Step 1</strong><br>
+        Scan this QR code
+    </p>
+    <div id="footerQrResult" class="footer-qr"></div>
+</div>
+
+    <div class="footer-step">
+        <p>
+            <strong>Step 2</strong><br>
+            Copy the text generated from the QR code by clicking <strong>Copy Text</strong>.
+        </p>
+    </div>
+
+<div class="footer-step">
+    <p>
+        <strong>Step 3</strong><br>
+        Scan this QR code
+    </p>
+    <div id="footerQrWebsite" class="footer-qr-small"></div>
+</div>
+
+    <div class="footer-step">
+        <p>
+            <strong>Step 4</strong><br>
+            Paste the text generated from the QR code on the
+            <strong>Paste QR Result</strong> area and click <strong>Recreate Test</strong>.
+        </p>
+    </div>
+</div> 
+</div> 
+
+    `;
+  
+const qrPayload = JSON.stringify({
+    t: currentTest,
+    n: document.getElementById("studentName").value,
+    g: document.getElementById("gradeSection").value,
+    q: questionOrder.join(","),
+    c: questionOrder.map(id => displayedChoiceOrder[id]).join(""),
+    r: Object.fromEntries(
+        shuffledQuestions.map(question => {
+            const selected = document.querySelector(
+                `input[name="question_${question.id}"]:checked`
+            );
+
+            return [
+                question.id,
+                selected ? selected.value : null
+            ];
+        })
+    )
+});
+
+new QRCode(
+    document.getElementById("footerQrResult"),
+    {
+        text: qrPayload,
+        width: 250,
+        height: 250
+    }
+); 
+  
+new QRCode(
+    document.getElementById("footerQrWebsite"),
+    {
+        text: "https://bloggermasterhub.github.io/ap7-term1-test/",
+        width: 80,
+        height: 80
+    }
+);  
+
+    document.getElementById(
+        "questionsContainer"
+    ).style.display = "none";
+
+    const reviewSection =
+        document.getElementById("reviewSection");
+
+    if(reviewSection){
+        reviewSection.style.display = "none";
+    }
+
+    answerSheetSection.style.display = "block";
+
+    closeAdminDropdown();
+
+    answerSheetSection.style.display = "block";
+    closeAdminDropdown();
+
+    window.print();
+  
+}      
+      
+        // FUTURE FUNCTIONS GO HERE
+    </script>
+</body>
+</html>
