@@ -1347,17 +1347,37 @@ function saveCurrentTestState() {
     });
 
     testStates[currentTest] = {
+
         studentName:
-            document.getElementById("studentName").value,
+            document.getElementById(
+                "studentName"
+            ).value,
 
         gradeSection:
-            document.getElementById("gradeSection").value,
+            document.getElementById(
+                "gradeSection"
+            ).value,
 
-        questionOrder: [...questionOrder],
+        questionOrder:
+            [...questionOrder],
 
-        choiceOrder: { ...displayedChoiceOrder },
+        choiceOrder:
+            { ...displayedChoiceOrder },
 
-        responses
+        responses,
+
+        loadedQrData:
+            testStates[currentTest]
+                ?.loadedQrData || null,
+
+        scoreValue:
+            document.getElementById(
+                "scoreValue"
+            ).textContent,
+
+        reviewMode:
+            testStates[currentTest]
+                ?.reviewMode || false
     };
 }      
 
@@ -1367,8 +1387,30 @@ function saveCurrentTestState() {
 ================================================== */      
       
 function loadTest(testKey){
+
+    showNormalExamScreen();
   
-  showNormalExamScreen();
+  const answerSheetSection =
+    document.getElementById(
+        "answerSheetSection"
+    );
+
+if(answerSheetSection){
+    answerSheetSection.style.display = "none";
+    answerSheetSection.innerHTML = "";
+}
+  
+    reviewModeUnlocked = false;
+
+    const reviewSection =
+        document.getElementById(
+            "reviewSection"
+        );
+
+    if(reviewSection){
+        reviewSection.style.display = "none";
+        reviewSection.innerHTML = "";
+    }
 
     saveCurrentTestState();
 
@@ -1433,6 +1475,23 @@ if(window.innerWidth <= 768){
             </div>
         `;
 
+const qrContainer =
+    document.getElementById(
+        "loadedQrContainer"
+    );
+
+const qrTarget =
+    document.getElementById(
+        "loadedQrCode"
+    );
+
+if(qrContainer){
+    qrContainer.style.display = "none";
+}
+
+if(qrTarget){
+    qrTarget.innerHTML = "";
+}
         return;
     }
 
@@ -1441,6 +1500,28 @@ if(window.innerWidth <= 768){
     submissionBar.style.display = "";
 
     const savedState = testStates[testKey];
+  
+const qrContainer =
+    document.getElementById("loadedQrContainer");
+
+const qrTarget =
+    document.getElementById("loadedQrCode");
+
+if(savedState?.loadedQrData){
+
+    qrTarget.innerHTML = "";
+
+    displayLoadedQRCode(
+        savedState.loadedQrData
+    );
+
+}else{
+
+    qrContainer.style.display = "none";
+
+    qrTarget.innerHTML = "";
+
+}
 
 if(savedState){
 
@@ -1498,6 +1579,9 @@ if(savedState){
         });
 
     renderQuestions(shuffledQuestions);
+  
+    updateTotalItems();
+
 
     Object.entries(
         savedState.responses
@@ -1522,15 +1606,49 @@ if(savedState){
     ).value =
         savedState.studentName || "";
 
-    document.getElementById(
-        "gradeSection"
-    ).value =
-        savedState.gradeSection || "";
+document.getElementById(
+    "gradeSection"
+).value =
+    savedState.gradeSection || "";
+
+document.getElementById(
+    "scoreValue"
+).textContent =
+    savedState.scoreValue || "_____";
+
+if(savedState.reviewMode){
+
+    reviewModeUnlocked = true;
+
+    unlockReviewMode();
 
     return;
 }
 
+return;
+}
 
+document.getElementById(
+    "studentName"
+).value = "";
+
+document.getElementById(
+    "gradeSection"
+).value = "";
+
+document.getElementById(
+    "scoreValue"
+).textContent = "_____";
+
+document.getElementById(
+    "loadedQrContainer"
+).style.display = "none";
+
+document.getElementById(
+    "loadedQrCode"
+).innerHTML = "";
+  
+  
 initializeQuestionOrder();
 renderQuestions(shuffledQuestions);
 updateTotalItems();
@@ -2165,6 +2283,9 @@ const qrPayload = {
     r: loadedExamData.responses
 };
 
+testStates[currentTest] ??= {};
+testStates[currentTest].loadedQrData = qrPayload;
+
 displayLoadedQRCode(qrPayload);
 
             if (
@@ -2257,7 +2378,8 @@ const reconstructedChoices =
         });
 
         renderQuestions(shuffledQuestions);
-      updateTotalItems();
+       
+        updateTotalItems();
 
         Object.entries(loadedExamData.responses).forEach(
             ([questionId, answer]) => {
@@ -2279,7 +2401,23 @@ const reconstructedChoices =
         document.getElementById("gradeSection").value =
     loadedExamData.gradeSection || "";
       
-      reviewModeUnlocked = true;
+testStates[currentTest] = {
+    studentName: loadedExamData.studentName || "",
+    gradeSection: loadedExamData.gradeSection || "",
+    questionOrder: [...loadedExamData.questionOrder],
+    choiceOrder: {...loadedExamData.choiceOrder},
+    responses: {...loadedExamData.responses},
+
+    loadedQrData:
+        testStates[currentTest]?.loadedQrData || null,
+
+    scoreValue:
+        document.getElementById("scoreValue").textContent,
+
+    reviewMode: true
+};
+
+reviewModeUnlocked = true;
 
 document.getElementById(
     "questionsContainer"
@@ -2713,6 +2851,8 @@ if (submissionBar) {
     submissionBar.style.display = "none";
 }
 
+updateTotalItems();
+  
 buildReviewResults();
   closeAdminDropdown();
 }
@@ -3009,6 +3149,28 @@ const arrangement =
 
         }
     });
+        
+let score = 0;
+
+shuffledQuestions.forEach(question => {
+
+    const answer =
+        loadedExamData.responses[
+            question.id
+        ];
+
+    if (
+        answer ===
+        question.correctAnswer
+    ) {
+        score++;
+    }
+
+});
+
+document.getElementById(
+    "scoreValue"
+).textContent = score;
 
     document.getElementById(
         "studentName"
