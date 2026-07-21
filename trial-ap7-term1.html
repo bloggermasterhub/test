@@ -2119,16 +2119,11 @@ function showSaveSuccess(exportData) {
         </div>
     `;
 
-    const qrPayload = JSON.stringify({
-        t: exportData.test,
-        n: exportData.studentName,
-        g: exportData.gradeSection,
-        q: exportData.questionOrder.join(","),
-        c: exportData.questionOrder
-            .map(id => exportData.choiceOrder[id])
-            .join(""),
-        r: exportData.responses
-    });
+const qrPayload =
+    "https://bloggermasterhub.github.io/test/trial-ap7-term1.html"
+    + "?test=" + encodeURIComponent(exportData.test)
+    + "&studentName=" + encodeURIComponent(exportData.studentName)
+    + "&gradeSection=" + encodeURIComponent(exportData.gradeSection);
 
     new QRCode(
         document.getElementById("reviewQrCode"),
@@ -2207,16 +2202,11 @@ function lockTest(exportData) {
     </div>
 `;
   
-const qrPayload = JSON.stringify({
-    t: exportData.test,
-    n: exportData.studentName,
-    g: exportData.gradeSection,
-    q: exportData.questionOrder.join(","),
-    c: exportData.questionOrder
-        .map(id => exportData.choiceOrder[id])
-        .join(""),
-    r: exportData.responses
-});
+const qrPayload =
+    "https://bloggermasterhub.github.io/test/trial-ap7-term1.html"
+    + "?test=" + encodeURIComponent(exportData.test)
+    + "&studentName=" + encodeURIComponent(exportData.studentName)
+    + "&gradeSection=" + encodeURIComponent(exportData.gradeSection);
 
 console.log(
     "QR Payload Length:",
@@ -3530,25 +3520,15 @@ function showAnswerSheet(){
 
     `;
   
-const qrPayload = JSON.stringify({
-    t: currentTest,
-    n: document.getElementById("studentName").value,
-    g: document.getElementById("gradeSection").value,
-    q: questionOrder.join(","),
-    c: questionOrder.map(id => displayedChoiceOrder[id]).join(""),
-    r: Object.fromEntries(
-        shuffledQuestions.map(question => {
-            const selected = document.querySelector(
-                `input[name="question_${question.id}"]:checked`
-            );
-
-            return [
-                question.id,
-                selected ? selected.value : null
-            ];
-        })
+const qrPayload =
+    "https://bloggermasterhub.github.io/test/trial-ap7-term1.html"
+    + "?test=" + encodeURIComponent(currentTest)
+    + "&studentName=" + encodeURIComponent(
+        document.getElementById("studentName").value
     )
-});
+    + "&gradeSection=" + encodeURIComponent(
+        document.getElementById("gradeSection").value
+    );
 
 new QRCode(
     document.getElementById("footerQrResult"),
@@ -3717,6 +3697,48 @@ async function recreateFromStudentInfo() {
 }
 
 window.addEventListener("load", () => {
+
+    const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const test =
+    params.get("test");
+
+const studentName =
+    params.get("studentName");
+
+const gradeSection =
+    params.get("gradeSection");
+
+if (
+    test &&
+    studentName &&
+    gradeSection
+) {
+
+    const data = {
+        test,
+        studentName,
+        gradeSection
+    };
+
+    document.getElementById(
+        "initialQrPasteInput"
+    ).value =
+        JSON.stringify(
+            data,
+            null,
+            4
+        );
+
+    setTimeout(() => {
+        recreateFromStudentInfo();
+    }, 500);
+
+    return;
+}
 
     const pendingJson =
         sessionStorage.getItem("pendingJson");
