@@ -501,7 +501,7 @@ body{
 }
 
 .answer-info div{
-    font-weight:bold;
+    font-weight:normal;
 }
 
 /* ==================================================
@@ -549,9 +549,20 @@ body{
     flex-shrink:0;
 }
 
-.answer-choice.selected{
-    background:#000;
-    color:#fff;
+.answer-choice.selected {
+    background: #000 !important;
+    color: #fff !important;
+}
+
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .answer-choice.selected {
+        border: 2px solid #000 !important;
+    }
 }     
  
 .answer-row{
@@ -1157,14 +1168,23 @@ initialRecreateTestBtn.addEventListener(
     }
 );
 
-        jsonFileInput.addEventListener("change", (event) => {
+jsonFileInput.addEventListener("change", (event) => {
     const file = event.target.files[0];
+    if (!file) return;
 
-    if (!file) {
-        return;
-    }
+    const reader = new FileReader();
 
-    loadExamFromJSON(file);
+    reader.onload = function(e){
+
+        sessionStorage.setItem(
+            "pendingJson",
+            e.target.result
+        );
+
+        location.reload();
+    };
+
+    reader.readAsText(file);
 });
 
         // FUTURE VARIABLES GO HERE
@@ -1346,39 +1366,36 @@ function saveCurrentTestState() {
             selected ? selected.value : null;
     });
 
-    testStates[currentTest] = {
+testStates[currentTest] = {
+    studentName:
+        document.getElementById("studentName").value,
 
-        studentName:
-            document.getElementById(
-                "studentName"
-            ).value,
+    gradeSection:
+        document.getElementById("gradeSection").value,
 
-        gradeSection:
-            document.getElementById(
-                "gradeSection"
-            ).value,
+    questionOrder:
+        [...questionOrder],
 
-        questionOrder:
-            [...questionOrder],
+    choiceOrder:
+        { ...displayedChoiceOrder },
 
-        choiceOrder:
-            { ...displayedChoiceOrder },
+    responses,
 
-        responses,
+    loadedQrData:
+        testStates[currentTest]?.loadedQrData || null,
 
-        loadedQrData:
-            testStates[currentTest]
-                ?.loadedQrData || null,
+    loadedExamData:
+        testStates[currentTest]?.loadedExamData || null,
 
-        scoreValue:
-            document.getElementById(
-                "scoreValue"
-            ).textContent,
+    scoreValue:
+        document.getElementById("scoreValue").textContent,
 
-        reviewMode:
-            testStates[currentTest]
-                ?.reviewMode || false
-    };
+    reviewMode:
+        testStates[currentTest]?.reviewMode || false,
+
+    answerSheetMode:
+        testStates[currentTest]?.answerSheetMode || false
+};
 }      
 
 /* ==================================================
@@ -1525,6 +1542,11 @@ if(savedState?.loadedQrData){
 
 if(savedState){
 
+console.log(
+    "RESTORED STATE",
+    savedState
+);
+  
     questionOrder =
         [...savedState.questionOrder];
 
@@ -1540,19 +1562,41 @@ if(savedState){
                 );
 
             const originalLetters =
-                ["A","B","C","D"];
+                ["A","B","C","D"];   
+      
+const storedValue =
+    displayedChoiceOrder[questionId];
 
-            const storedValue =
-                displayedChoiceOrder[questionId];
+let patternIndex;
 
-            const patternIndex =
-                PATTERN_CHARS.indexOf(storedValue);
+if (Array.isArray(storedValue)) {
 
-            const arrangement =
-                CHOICE_PATTERNS[patternIndex];
+    patternIndex =
+        CHOICE_PATTERNS.indexOf(
+            storedValue.join("")
+        );
 
-            const reconstructedChoices =
-                arrangement.split("")
+} else {
+
+    patternIndex =
+        PATTERN_CHARS.indexOf(
+            storedValue
+        );
+
+}
+
+const arrangement =
+    CHOICE_PATTERNS[patternIndex];
+
+if(!arrangement){
+
+
+    return originalQuestion;
+}
+
+const reconstructedChoices =
+    arrangement.split("")
+
                 .map(letter => {
 
                     const originalIndex =
@@ -1561,6 +1605,7 @@ if(savedState){
                     return originalQuestion.choices[
                         originalIndex
                     ];
+
                 });
 
             const newCorrectAnswerIndex =
@@ -1569,19 +1614,23 @@ if(savedState){
                 );
 
             return {
+
                 ...originalQuestion,
+
                 choices: reconstructedChoices,
+
                 correctAnswer:
                     String.fromCharCode(
                         65 + newCorrectAnswerIndex
                     )
+
             };
+
         });
 
     renderQuestions(shuffledQuestions);
-  
-    updateTotalItems();
 
+    updateTotalItems();
 
     Object.entries(
         savedState.responses
@@ -1599,6 +1648,7 @@ if(savedState){
         if(radio){
             radio.checked = true;
         }
+
     });
 
     document.getElementById(
@@ -1606,26 +1656,36 @@ if(savedState){
     ).value =
         savedState.studentName || "";
 
-document.getElementById(
-    "gradeSection"
-).value =
-    savedState.gradeSection || "";
+    document.getElementById(
+        "gradeSection"
+    ).value =
+        savedState.gradeSection || "";
 
-document.getElementById(
-    "scoreValue"
-).textContent =
-    savedState.scoreValue || "_____";
+    document.getElementById(
+        "scoreValue"
+    ).textContent =
+        savedState.scoreValue || "_____";
 
-if(savedState.reviewMode){
+    if(savedState.answerSheetMode){
 
-    reviewModeUnlocked = true;
+        showAnswerSheet();
 
-    unlockReviewMode();
+        return;
+
+    }
+
+    if(savedState.reviewMode){
+
+        reviewModeUnlocked = true;
+
+        unlockReviewMode();
+
+        return;
+
+    }
 
     return;
-}
 
-return;
 }
 
 document.getElementById(
@@ -2411,10 +2471,14 @@ testStates[currentTest] = {
     loadedQrData:
         testStates[currentTest]?.loadedQrData || null,
 
+    loadedExamData:
+        structuredClone(loadedExamData),
+
     scoreValue:
         document.getElementById("scoreValue").textContent,
 
-    reviewMode: true
+    reviewMode: true,
+    answerSheetMode: false
 };
 
 reviewModeUnlocked = true;
@@ -2467,11 +2531,11 @@ buildReviewResults();
       
       function exportReviewHTML() {
 
-    const studentName =
-        document.getElementById("studentName").value || "";
+const studentName =
+    (document.getElementById("studentName").value || "").toUpperCase();
 
-    const gradeSection =
-        document.getElementById("gradeSection").value || "";
+const gradeSection =
+    (document.getElementById("gradeSection").value || "").toUpperCase();
 
     const scoreText =
         document.getElementById("scoreValue").textContent || "0";
@@ -2612,12 +2676,12 @@ body{
     <h2>${document.getElementById("examTitle").textContent} Result</h2>
 
     <div class="info">
-        <div>
-    <strong>Name:</strong> ${studentName}
+<div>
+    <strong>Name:</strong> ${studentName.toUpperCase()}
 </div>
 
 <div>
-    <strong>Grade & Section:</strong> ${gradeSection}
+    <strong>Grade & Section:</strong> ${gradeSection.toUpperCase()}
 </div>
 
 <div>
@@ -3188,6 +3252,15 @@ document.getElementById(
 reviewModeUnlocked = true;
 
 unlockReviewMode();
+        
+testStates[currentTest] ??= {};
+
+testStates[currentTest].loadedExamData =
+    structuredClone(loadedExamData);
+
+testStates[currentTest].reviewMode = true;
+
+testStates[currentTest].answerSheetMode = false;
 
 // Clear the QR paste textbox
 document.getElementById("qrPasteInput").value = "";
@@ -3216,6 +3289,27 @@ function convertToUppercase(event) {
 
 studentNameInput.addEventListener("input", convertToUppercase);
 gradeSectionInput.addEventListener("input", convertToUppercase);
+  
+  
+studentNameInput.addEventListener(
+    "input",
+    saveCurrentTestState
+);
+
+gradeSectionInput.addEventListener(
+    "input",
+    saveCurrentTestState
+);
+
+document.addEventListener("change", (e) => {
+
+    if (e.target.type === "radio") {
+
+        saveCurrentTestState();
+
+    }
+
+});
       
 studentNameInput.addEventListener("input", () => {
     studentNameInput.classList.remove("error-highlight");
@@ -3382,20 +3476,20 @@ function showAnswerSheet(){
 
     <div class="answer-info">
 
-        <div>
-            Name:
-            ${document.getElementById("studentName").value}
-        </div>
+<div>
+    <strong>Name:</strong>
+    ${document.getElementById("studentName").value.toUpperCase()}
+</div>
 
-        <div>
-            Grade & Section:
-            ${document.getElementById("gradeSection").value}
-        </div>
+<div>
+    <strong>Grade & Section:</strong>
+    ${document.getElementById("gradeSection").value.toUpperCase()}
+</div>
 
-        <div>
-            Score:
-            ${score} / ${totalItems}
-        </div>
+<div>
+    <strong>Score:</strong>
+    ${score} / ${totalItems}
+</div>
 
     </div>
 
@@ -3501,10 +3595,98 @@ new QRCode(
 
     answerSheetSection.style.display = "block";
     closeAdminDropdown();
+  
+testStates[currentTest] ??= {};
+
+testStates[currentTest].answerSheetMode = true;
+
+testStates[currentTest].reviewMode = false;
 
     window.print();
   
-}  
+}
+  
+window.addEventListener("load", () => {
+
+    const pendingJson =
+        sessionStorage.getItem("pendingJson");
+
+    if (pendingJson) {
+
+        sessionStorage.removeItem(
+            "pendingJson"
+        );
+
+        const file = new File(
+            [pendingJson],
+            "temp.json",
+            {
+                type: "application/json"
+            }
+        );
+
+        loadExamFromJSON(file);
+        return;
+    }
+
+    const pendingQr =
+        sessionStorage.getItem("pendingQr");
+
+    if (pendingQr) {
+
+        sessionStorage.removeItem(
+            "pendingQr"
+        );
+
+        document.getElementById(
+            "qrPasteInput"
+        ).value = pendingQr;
+
+        // direktang recreate
+        try {
+
+            const qrData =
+                JSON.parse(pendingQr);
+
+            if (qrData.t) {
+                loadTest(qrData.t);
+            } else {
+                loadTest("unit1");
+            }
+
+            const rebuiltChoiceOrder = {};
+
+            qrData.q
+                .split(",")
+                .forEach((questionId,index)=>{
+                    rebuiltChoiceOrder[
+                        Number(questionId)
+                    ] = qrData.c[index];
+                });
+
+            loadedExamData = {
+                studentName: qrData.n,
+                gradeSection: qrData.g,
+                questionOrder:
+                    qrData.q
+                    .split(",")
+                    .map(Number),
+                choiceOrder:
+                    rebuiltChoiceOrder,
+                responses:
+                    qrData.r
+            };
+
+            loadRecreatedExam(
+                loadedExamData
+            );
+
+        } catch(err){
+            console.error(err);
+        }
+    }
+
+});
       
 hideInitialExamScreen();
       
