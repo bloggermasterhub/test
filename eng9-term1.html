@@ -721,53 +721,70 @@ body{
     padding-top:15px;
 
     display:flex;
+    justify-content:space-between;
     align-items:flex-start;
-    gap:15px;
-
-    font-size:12px;
+    gap:30px;
 }
 
-/* Step 1 mas malaki */
-.footer-step:first-child{
-    flex:2;
-}
-
-/* Step 2, 3, 4 pantay-pantay */
-.footer-step:nth-child(2),
-.footer-step:nth-child(3),
-.footer-step:nth-child(4){
-    flex:1;
-}
-
-.footer-step{
+.footer-qr-section{
+    width:40%;
     text-align:center;
+}
 
+.footer-qr{
+    width:120px;
+    height:120px;
+    margin:10px auto 0;
+}
+
+.footer-sign-section{
+    width:55%;
+    height:250px; /* kapareho ng QR code */
     display:flex;
     flex-direction:column;
+}
+
+.teacher-block,
+.parent-signature{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
     align-items:center;
+    text-align:center;
+}
+
+.parent-signature{
+
+    font-size:20px;
+}
+
+.teacher-block{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.teacher-name{
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.teacher-position{
+    font-weight: normal;
+    margin-top: 4px;
 }
 
 .footer-qr{
     width:250px;
     height:250px;
     margin:0 auto 8px;
-}
-      
-.footer-qr-small{
-    width:80px;
-    height:80px;
-    margin:0 auto 8px;
 }      
-
-.footer-step p{
-    margin:0;
-    line-height:1.3;
-}
 
 /* Mobile */
 @media screen and (max-width:600px){
 
     .answer-footer{
+        
         flex-direction:column;
     }
 
@@ -1026,8 +1043,8 @@ body{
 ================================================== */
   
 "use strict";  
-  
-        const saveResponsesBtn = document.getElementById("saveResponsesBtn");
+
+const saveResponsesBtn = document.getElementById("saveResponsesBtn");
 const saveReviewBtn =
     document.getElementById("saveReviewBtn");
         const exportHtmlBtn = document.getElementById("exportHtmlBtn");
@@ -1155,17 +1172,7 @@ refreshBtn.addEventListener(
       
 initialRecreateTestBtn.addEventListener(
     "click",
-    () => {
-
-        document.getElementById(
-            "qrPasteInput"
-        ).value =
-            document.getElementById(
-                "initialQrPasteInput"
-            ).value;
-
-        recreateTestFromPaste();
-    }
+    recreateFromStudentInfo
 );
 
 jsonFileInput.addEventListener("change", (event) => {
@@ -2129,16 +2136,11 @@ function showSaveSuccess(exportData) {
         </div>
     `;
 
-    const qrPayload = JSON.stringify({
-        t: exportData.test,
-        n: exportData.studentName,
-        g: exportData.gradeSection,
-        q: exportData.questionOrder.join(","),
-        c: exportData.questionOrder
-            .map(id => exportData.choiceOrder[id])
-            .join(""),
-        r: exportData.responses
-    });
+const qrPayload =
+    "https://bloggermasterhub.github.io/test/eng9-term1.html"
+    + "?test=" + encodeURIComponent(exportData.test)
+    + "&studentName=" + encodeURIComponent(exportData.studentName)
+    + "&gradeSection=" + encodeURIComponent(exportData.gradeSection);
 
     new QRCode(
         document.getElementById("reviewQrCode"),
@@ -2217,16 +2219,11 @@ function lockTest(exportData) {
     </div>
 `;
   
-const qrPayload = JSON.stringify({
-    t: exportData.test,
-    n: exportData.studentName,
-    g: exportData.gradeSection,
-    q: exportData.questionOrder.join(","),
-    c: exportData.questionOrder
-        .map(id => exportData.choiceOrder[id])
-        .join(""),
-    r: exportData.responses
-});
+const qrPayload =
+    "https://bloggermasterhub.github.io/test/eng9-term1.html"
+    + "?test=" + encodeURIComponent(exportData.test)
+    + "&studentName=" + encodeURIComponent(exportData.studentName)
+    + "&gradeSection=" + encodeURIComponent(exportData.gradeSection);
 
 console.log(
     "QR Payload Length:",
@@ -2289,11 +2286,17 @@ function displayLoadedQRCode(qrData) {
     qrTarget.innerHTML = "";
     container.style.display = "block";
 
-    new QRCode(qrTarget, {
-        text: JSON.stringify(qrData),
-        width: 250,
-        height: 250
-    });
+const qrText =
+    "https://bloggermasterhub.github.io/test/eng9-term1.html"
+    + "?test=" + encodeURIComponent(qrData.test || qrData.t)
+    + "&studentName=" + encodeURIComponent(qrData.studentName || qrData.n)
+    + "&gradeSection=" + encodeURIComponent(qrData.gradeSection || qrData.g);
+
+new QRCode(qrTarget, {
+    text: qrText,
+    width: 250,
+    height: 250
+});
 }      
 
 
@@ -3505,60 +3508,45 @@ function showAnswerSheet(){
 </div>
 
 <div class="answer-footer">
-<div class="footer-step">
-    <p>
-        <strong>Step 1</strong><br>
-        Scan this QR code
-    </p>
-    <div id="footerQrResult" class="footer-qr"></div>
-</div>
 
-    <div class="footer-step">
-        <p>
-            <strong>Step 2</strong><br>
-            Copy the text generated from the QR code by clicking <strong>Copy Text</strong>.
-        </p>
+    <div class="footer-qr-section">
+        <p>Scan this QR Code</p>
+        <div id="footerQrResult" class="footer-qr"></div>
     </div>
 
-<div class="footer-step">
-    <p>
-        <strong>Step 3</strong><br>
-        Scan this QR code
-    </p>
-    <div id="footerQrWebsite" class="footer-qr-small"></div>
+    <div class="footer-sign-section">
+
+<div class="teacher-block"><br />
+    <div class="teacher-name">
+        <br />
+        ANTONIO S. RAMELO
+    </div>
+
+    <div class="teacher-position">
+        A.P. 7 Teacher
+    </div>
 </div>
 
-    <div class="footer-step">
-        <p>
-            <strong>Step 4</strong><br>
-            Paste the text generated from the QR code on the
-            <strong>Paste QR Result</strong> area and click <strong>Recreate Test</strong>.
-        </p>
-    </div>
-</div> 
+<div class="parent-signature">
+    ____________________________<br />
+    Signature of Parent/Guardian
+</div>
+
+</div>
+
 </div> 
 
     `;
   
-const qrPayload = JSON.stringify({
-    t: currentTest,
-    n: document.getElementById("studentName").value,
-    g: document.getElementById("gradeSection").value,
-    q: questionOrder.join(","),
-    c: questionOrder.map(id => displayedChoiceOrder[id]).join(""),
-    r: Object.fromEntries(
-        shuffledQuestions.map(question => {
-            const selected = document.querySelector(
-                `input[name="question_${question.id}"]:checked`
-            );
-
-            return [
-                question.id,
-                selected ? selected.value : null
-            ];
-        })
+const qrPayload =
+    "https://bloggermasterhub.github.io/test/eng9-term1.html"
+    + "?test=" + encodeURIComponent(currentTest)
+    + "&studentName=" + encodeURIComponent(
+        document.getElementById("studentName").value
     )
-});
+    + "&gradeSection=" + encodeURIComponent(
+        document.getElementById("gradeSection").value
+    );
 
 new QRCode(
     document.getElementById("footerQrResult"),
@@ -3567,16 +3555,7 @@ new QRCode(
         width: 250,
         height: 250
     }
-); 
-  
-new QRCode(
-    document.getElementById("footerQrWebsite"),
-    {
-        text: "https://bloggermasterhub.github.io/test/ap7-term1.html",
-        width: 80,
-        height: 80
-    }
-);  
+);   
 
     document.getElementById(
         "questionsContainer"
@@ -3605,8 +3584,170 @@ testStates[currentTest].reviewMode = false;
     window.print();
   
 }
-  
+
+function getTestFolder(test) {
+
+    const folders = {
+        unit1: "ut1",
+        unit2: "ut2",
+        unit3: "ut3",
+        unit4: "ut4",
+        unit5: "ut5",
+        summative1: "st1",
+        summative2: "st2",
+        exam: "e"
+    };
+
+    return folders[test];
+}
+
+function buildFilename(
+    test,
+    studentName,
+    gradeSection
+) {
+
+    const cleanStudent =
+        studentName
+            .toUpperCase()
+            .replace(/[^\w\s-]/g, "")
+            .trim()
+            .replace(/\s+/g, "_");
+
+    const testCode =
+        getTestCode(test);
+
+    return `${cleanStudent}_${gradeSection}_${testCode}.json`;
+}
+
+async function loadStudentJson(
+    test,
+    studentName,
+    gradeSection
+) {
+
+    const sectionFolder =
+        gradeSection.toLowerCase();
+
+    const testFolder =
+        getTestFolder(test);
+
+    const filename =
+        buildFilename(
+            test,
+            studentName,
+            gradeSection
+        );
+
+    const path =
+    `json/eng9/${sectionFolder}/${testFolder}/${filename}`;
+
+    console.log("Loading:", path);
+
+    const response =
+        await fetch(path);
+
+    if (!response.ok) {
+        throw new Error(
+            "File not found:\n" + path
+        );
+    }
+
+    return await response.json();
+}
+
+async function recreateFromStudentInfo() {
+
+    const text =
+        document.getElementById(
+            "initialQrPasteInput"
+        ).value.trim();
+
+    if (!text) {
+
+        alert(
+            "Please enter student information."
+        );
+
+        return;
+    }
+
+    try {
+
+        const info =
+            JSON.parse(text);
+
+        const examData =
+            await loadStudentJson(
+                info.test,
+                info.studentName,
+                info.gradeSection
+            );
+
+        loadTest(info.test);
+
+        setTimeout(() => {
+
+            loadRecreatedExam(
+                examData
+            );
+
+        }, 100);
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Matching JSON file not found."
+        );
+    }
+}
+
 window.addEventListener("load", () => {
+
+    const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const test =
+    params.get("test");
+
+const studentName =
+    params.get("studentName");
+
+const gradeSection =
+    params.get("gradeSection");
+
+if (
+    test &&
+    studentName &&
+    gradeSection
+) {
+
+    const data = {
+        test,
+        studentName,
+        gradeSection
+    };
+
+    document.getElementById(
+        "initialQrPasteInput"
+    ).value =
+        JSON.stringify(
+            data,
+            null,
+            4
+        );
+
+    setTimeout(() => {
+        recreateFromStudentInfo();
+    }, 500);
+
+    return;
+}
 
     const pendingJson =
         sessionStorage.getItem("pendingJson");
