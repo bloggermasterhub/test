@@ -870,7 +870,7 @@ body{
 }
 
 .suggestion-item {
-    padding: 12px 15px;
+    padding: 5px 15px;
     cursor: pointer;
 }
 
@@ -1114,7 +1114,8 @@ body{
    at HTML elements
 ================================================== */
   
-"use strict";  
+"use strict"; 
+
 
 const SUBJECT_CONFIG = {
 
@@ -1125,6 +1126,7 @@ const SUBJECT_CONFIG = {
     teacherName: "ANTONIO S. RAMELO"
 
 };
+
 
 const FULL_SUBJECT =
     `${SUBJECT_CONFIG.subjectName} ${SUBJECT_CONFIG.gradeLevel}`;
@@ -1179,6 +1181,9 @@ const SUBJECT_CODE =
 
 const SUBJECT_LABEL =
     getTeacherSubjectLabel();
+
+
+ 
 
 const saveResponsesBtn = document.getElementById("saveResponsesBtn");
 const saveReviewBtn =
@@ -1377,17 +1382,6 @@ function getTestCode(test) {
 
     return testCodes[test] || test.toUpperCase();
 }      
-
-
-
-document.title =
-    `${FULL_TITLE} Test`;
-
-document.getElementById(
-    "examTitle"
-).textContent =
-    FULL_TITLE;
-
 
 /* ==================================================
    TEST DIRECTORY
@@ -2284,7 +2278,7 @@ function showSaveSuccess(exportData) {
     `;
 
 const qrPayload =
-    "https://bloggermasterhub.github.io/test/ap7-term1.html"
+    "https://bloggermasterhub.github.io/test/${SUBJECT_CODE}-term1.html"
     + "?test=" + encodeURIComponent(exportData.test)
     + "&studentName=" + encodeURIComponent(exportData.studentName)
     + "&gradeSection=" + encodeURIComponent(exportData.gradeSection);
@@ -2367,7 +2361,7 @@ function lockTest(exportData) {
 `;
   
 const qrPayload =
-    "https://bloggermasterhub.github.io/test/ap7-term1.html"
+    "https://bloggermasterhub.github.io/test/${SUBJECT_CODE}-term1.html"
     + "?test=" + encodeURIComponent(exportData.test)
     + "&studentName=" + encodeURIComponent(exportData.studentName)
     + "&gradeSection=" + encodeURIComponent(exportData.gradeSection);
@@ -2434,7 +2428,7 @@ function displayLoadedQRCode(qrData) {
     container.style.display = "block";
 
 const qrText =
-    "https://bloggermasterhub.github.io/test/ap7-term1.html"
+    "https://bloggermasterhub.github.io/test/${SUBJECT_CODE}-term1.html"
     + "?test=" + encodeURIComponent(qrData.test || qrData.t)
     + "&studentName=" + encodeURIComponent(qrData.studentName || qrData.n)
     + "&gradeSection=" + encodeURIComponent(qrData.gradeSection || qrData.g);
@@ -3687,7 +3681,7 @@ function showAnswerSheet(){
     `;
   
 const qrPayload =
-    "https://bloggermasterhub.github.io/test/ap7-term1.html"
+    "https://bloggermasterhub.github.io/test/${SUBJECT_CODE}-term1.html"
     + "?test=" + encodeURIComponent(currentTest)
     + "&studentName=" + encodeURIComponent(
         document.getElementById("studentName").value
@@ -3788,7 +3782,7 @@ async function loadStudentJson(
         );
 
     const path =
-    `json/ap7/${sectionFolder}/${testFolder}/${filename}`;
+    `json/${SUBJECT_CODE}/${sectionFolder}/${testFolder}/${filename}`;
 
     console.log("Loading:", path);
 
