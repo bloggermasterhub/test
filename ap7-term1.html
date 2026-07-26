@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Araling Panlipunan 7 Term 1 Test</title>
+    <title id="pageTitle"></title>
+
 
     <style>
 
@@ -63,6 +64,13 @@
             border-bottom: 2px solid var(--border);
             padding-bottom: 16px;
         }
+
+#examTitle {
+    text-align: center;
+    width: 100%;
+    display: block;
+    margin: 0 auto;
+}
 
         .header h1 {
             color: var(--primary);
@@ -1106,7 +1114,7 @@ body{
 <script src="tests/ap7-term1-st2.js"></script>
 <script src="tests/ap7-term1-e.js"></script>
 
-<script src="tests/ap8-term1-ut1.js"></script>
+<!--<script src="tests/ap8-term1-ut1.js"></script>
 <script src="tests/ap8-term1-ut2.js"></script>
 <script src="tests/ap8-term1-ut3.js"></script>
 <script src="tests/ap8-term1-ut4.js"></script>
@@ -1122,7 +1130,7 @@ body{
 <script src="tests/eng9-term1-ut5.js"></script>
 <script src="tests/eng9-term1-st1.js"></script>
 <script src="tests/eng9-term1-st2.js"></script>
-<script src="tests/eng9-term1-e.js"></script>
+<script src="tests/eng9-term1-e.js"></script>-->
 
 <script>
   
@@ -1146,11 +1154,30 @@ const SUBJECT_CONFIG = {
 };
 
 
+
+
 const FULL_SUBJECT =
     `${SUBJECT_CONFIG.subjectName} ${SUBJECT_CONFIG.gradeLevel}`;
 
 const FULL_TITLE =
     `${FULL_SUBJECT} ${SUBJECT_CONFIG.term}`;
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const examTitle =
+        document.getElementById("examTitle");
+
+    if (examTitle) {
+        examTitle.textContent =
+            FULL_TITLE;
+    }
+
+    document.title =
+        `${FULL_TITLE} Test`;
+
+});
+
 
 function getSubjectCode() {
 
