@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>English 9 Term 1 Test</title>
+    <title id="pageTitle"></title>
+
 
     <style>
 
@@ -63,6 +64,13 @@
             border-bottom: 2px solid var(--border);
             padding-bottom: 16px;
         }
+
+#examTitle {
+    text-align: center;
+    width: 100%;
+    display: block;
+    margin: 0 auto;
+}
 
         .header h1 {
             color: var(--primary);
@@ -820,13 +828,71 @@ body{
     padding:14px 30px;
     font-size:18px;
     font-weight:bold;
-}      
+} 
+
+
+.student-info {
+    display: flex;
+    gap: 25px;
+}
+
+.field-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.field-group label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.field-group input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.autocomplete {
+    position: relative;
+}
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.suggestion-item {
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: #f3f4f6;
+}
+
+     
     </style>
 </head>
 
 <body>
 
-<script src="qrcode.min.js"></script>
+<script src="js/qr/qrcode.min.js"></script>
 
     <div class="exam-container">
         <div class="exam-card">
@@ -862,9 +928,7 @@ body{
     </nav>
 
     <div class="header">
-        <h1 id="examTitle">
-            English 9 Term 1
-        </h1>
+        <h1 id="examTitle"></h1>
     </div>
 
 </div>
@@ -887,21 +951,37 @@ body{
      Name at Gr*de/Section
 =======================*========================= -->
 
-            <div class="student-info">
-                <div class="field-group">
-                    <label for="studentName">Student Name</label>
-                    <input type="text" id="studentName" placeholder="Enter student name">
-                </div>
+<div class="student-info">
 
-                <div class="field-group">
-    <label for="gradeSection">Grade &amp; Section</label>
-    <input
-        type="text"
-        id="gradeSection"
-        placeholder="Example: 8-Masipag">
+    <div class="field-group autocomplete">
+        <label for="studentName">Student Name</label>
+
+        <input
+            type="text"
+            id="studentName"
+            placeholder="ENTER STUDENT NAME"
+            autocomplete="off">
+
+        <div id="studentSuggestions"
+             class="suggestions"></div>
+    </div>
+
+    <div class="field-group autocomplete">
+        <label for="gradeSection">
+            Grade &amp; Section
+        </label>
+
+        <input
+            type="text"
+            id="gradeSection"
+            placeholder="TYPE OR SELECT GRADE & SECTION"
+            autocomplete="off">
+
+        <div id="gradeSuggestions"
+             class="suggestions"></div>
+    </div>
+
 </div>
-            </div>
-
 
 <!-- ==*==================================*===========
      LIVE SCORE DISPLA*
@@ -1025,6 +1105,24 @@ body{
 
         </div> 
   
+<!--<script src="tests/ap7-term1-ut1.js"></script>
+<script src="tests/ap7-term1-ut2.js"></script>
+<script src="tests/ap7-term1-ut3.js"></script>
+<script src="tests/ap7-term1-ut4.js"></script>
+<script src="tests/ap7-term1-ut5.js"></script>
+<script src="tests/ap7-term1-st1.js"></script>
+<script src="tests/ap7-term1-st2.js"></script>
+<script src="tests/ap7-term1-e.js"></script>
+
+<script src="tests/ap8-term1-ut1.js"></script>
+<script src="tests/ap8-term1-ut2.js"></script>
+<script src="tests/ap8-term1-ut3.js"></script>
+<script src="tests/ap8-term1-ut4.js"></script>
+<script src="tests/ap8-term1-ut5.js"></script>
+<script src="tests/ap8-term1-st1.js"></script>
+<script src="tests/ap8-term1-st2.js"></script>
+<script src="tests/ap8-term1-e.js"></script>-->
+
 <script src="tests/eng9-term1-ut1.js"></script>
 <script src="tests/eng9-term1-ut2.js"></script>
 <script src="tests/eng9-term1-ut3.js"></script>
@@ -1042,7 +1140,95 @@ body{
    at HTML elements
 ================================================== */
   
-"use strict";  
+"use strict"; 
+
+
+const SUBJECT_CONFIG = {
+
+    subjectName: "English",
+    gradeLevel: "9",
+    term: "Term 1",
+
+    teacherName: "ANTONIO S. RAMELO"
+
+};
+
+
+
+
+const FULL_SUBJECT =
+    `${SUBJECT_CONFIG.subjectName} ${SUBJECT_CONFIG.gradeLevel}`;
+
+const FULL_TITLE =
+    `${FULL_SUBJECT} ${SUBJECT_CONFIG.term}`;
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const examTitle =
+        document.getElementById("examTitle");
+
+    if (examTitle) {
+        examTitle.textContent =
+            FULL_TITLE;
+    }
+
+    document.title =
+        `${FULL_TITLE} Test`;
+
+});
+
+
+function getSubjectCode() {
+
+    const subject =
+        SUBJECT_CONFIG.subjectName.toLowerCase();
+
+    const grade =
+        SUBJECT_CONFIG.gradeLevel;
+
+    if (subject.includes("araling panlipunan")) {
+        return `ap${grade}`;
+    }
+
+    if (subject.includes("english")) {
+        return `eng${grade}`;
+    }
+
+    if (subject.includes("math")) {
+        return `math${grade}`;
+    }
+
+    if (subject.includes("science")) {
+        return `sci${grade}`;
+    }
+
+    return `sub${grade}`;
+}
+
+function getTeacherSubjectLabel() {
+
+    const subject =
+        SUBJECT_CONFIG.subjectName.toLowerCase();
+
+    const grade =
+        SUBJECT_CONFIG.gradeLevel;
+
+    if (subject.includes("araling panlipunan")) {
+        return `A.P. ${grade}`;
+    }
+
+    return `${SUBJECT_CONFIG.subjectName} ${grade}`;
+}
+
+const SUBJECT_CODE =
+    getSubjectCode();
+
+const SUBJECT_LABEL =
+    getTeacherSubjectLabel();
+
+
+ 
 
 const saveResponsesBtn = document.getElementById("saveResponsesBtn");
 const saveReviewBtn =
@@ -1249,35 +1435,35 @@ function getTestCode(test) {
       
 const tests = {
     unit1: {
-        title: "English 9 Term 1 Unit Test 1",
+        title: `${FULL_TITLE} Unit Test 1`,
         questions: unitTest1Questions
     },
     unit2: {
-        title: "English 9 Term 1 Unit Test 2",
+        title: `${FULL_TITLE} Unit Test 2`,
         questions: unitTest2Questions
     },
     unit3: {
-        title: "English 9 Term 1 Unit Test 3",
+        title: `${FULL_TITLE} Unit Test 3`,
         questions: unitTest3Questions
     },
     unit4: {
-        title: "English 9 Term 1 Unit Test 4",
+        title: `${FULL_TITLE} Unit Test 4`,
         questions: unitTest4Questions
     },
     unit5: {
-        title: "English 9 Term 1 Unit Test 5",
+        title: `${FULL_TITLE} Unit Test 5`,
         questions: unitTest5Questions
     },
     summative1: {
-        title: "English 9 Term 1 Summative Test 1",
+        title: `${FULL_TITLE} Summative Test 1`,
         questions: summativeTest1Questions
     },
     summative2: {
-        title: "English 9 Term 1 Summative Test 2",
+        title: `${FULL_TITLE} Summative Test 2`,
         questions: summativeTest2Questions
     },
     exam: {
-        title: "English 9 Term 1 Examination",
+        title: `${FULL_TITLE} Examination`,
         questions: examinationQuestions
     }
 };      
@@ -2067,7 +2253,7 @@ function saveReviewFile() {
 const testCode = getTestCode(currentTest);
 
 const filename =
-    `${cleanStudent}_${cleanSection}_${testCode}_Review.json`;
+    `${cleanStudent}_${cleanSection}_${testCode}.json`;
 
     const blob = new Blob(
         [JSON.stringify(exportData, null, 2)],
@@ -2137,7 +2323,7 @@ function showSaveSuccess(exportData) {
     `;
 
 const qrPayload =
-    "https://bloggermasterhub.github.io/test/eng9-term1.html"
+    "https://bloggermasterhub.github.io/test/${SUBJECT_CODE}-term1.html"
     + "?test=" + encodeURIComponent(exportData.test)
     + "&studentName=" + encodeURIComponent(exportData.studentName)
     + "&gradeSection=" + encodeURIComponent(exportData.gradeSection);
@@ -2220,7 +2406,7 @@ function lockTest(exportData) {
 `;
   
 const qrPayload =
-    "https://bloggermasterhub.github.io/test/eng9-term1.html"
+    "https://bloggermasterhub.github.io/test/${SUBJECT_CODE}-term1.html"
     + "?test=" + encodeURIComponent(exportData.test)
     + "&studentName=" + encodeURIComponent(exportData.studentName)
     + "&gradeSection=" + encodeURIComponent(exportData.gradeSection);
@@ -2287,7 +2473,7 @@ function displayLoadedQRCode(qrData) {
     container.style.display = "block";
 
 const qrText =
-    "https://bloggermasterhub.github.io/test/eng9-term1.html"
+    "https://bloggermasterhub.github.io/test/${SUBJECT_CODE}-term1.html"
     + "?test=" + encodeURIComponent(qrData.test || qrData.t)
     + "&studentName=" + encodeURIComponent(qrData.studentName || qrData.n)
     + "&gradeSection=" + encodeURIComponent(qrData.gradeSection || qrData.g);
@@ -2599,7 +2785,7 @@ const htmlContent = `
 <html>
 <head>
 <meta charset="UTF-8">
-<title>English 9 Unit Test</title>
+<title>Araling Panlipunan 7 Unit Test</title>
 
 <style>
 
@@ -3510,8 +3696,9 @@ function showAnswerSheet(){
 <div class="answer-footer">
 
     <div class="footer-qr-section">
-        <p>Scan this QR Code</p>
+        <p style="margin-bottom:15px;">Scan this QR Code</p>
         <div id="footerQrResult" class="footer-qr"></div>
+
     </div>
 
     <div class="footer-sign-section">
@@ -3523,7 +3710,7 @@ function showAnswerSheet(){
     </div>
 
     <div class="teacher-position">
-        A.P. 7 Teacher
+        ${SUBJECT_LABEL} Teacher
     </div>
 </div>
 
@@ -3539,7 +3726,7 @@ function showAnswerSheet(){
     `;
   
 const qrPayload =
-    "https://bloggermasterhub.github.io/test/eng9-term1.html"
+    "https://bloggermasterhub.github.io/test/${SUBJECT_CODE}-term1.html"
     + "?test=" + encodeURIComponent(currentTest)
     + "&studentName=" + encodeURIComponent(
         document.getElementById("studentName").value
@@ -3640,7 +3827,7 @@ async function loadStudentJson(
         );
 
     const path =
-    `json/eng9/${sectionFolder}/${testFolder}/${filename}`;
+    `json/${SUBJECT_CODE}/${sectionFolder}/${testFolder}/${filename}`;
 
     console.log("Loading:", path);
 
@@ -3833,5 +4020,13 @@ hideInitialExamScreen();
       
         // FUTURE FUNCTIONS GO HERE
     </script>
+
+<script src="js/sections/sections.js"></script>
+<script src="js/student-names/student-name-function.js"></script>
+<script src="js/student-names/7-camia.js"></script>
+<script src="js/student-names/7-carnation.js"></script>
+<script src="js/student-names/8-ruby.js"></script>
+<script src="js/student-names/9-einstein.js"></script>
+<script src="js/student-names/9-galileo.js"></script>
 </body>
 </html>
