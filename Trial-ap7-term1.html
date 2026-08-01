@@ -4487,20 +4487,21 @@ async function printStudentPaper(
 
 async function openStudentPaperViewer(group){
 
+    console.log("OPEN VIEWER");
+
     try{
 
         const response =
             await fetch(
-                `${group.folder}/index.json`
+                `${group.folder}/${group.indexFile}`
             );
+
+        console.log("INDEX FETCHED");
 
         currentViewerFiles =
             await response.json();
 
-        if(!currentViewerFiles.length){
-            alert("No records found.");
-            return;
-        }
+        console.log(currentViewerFiles);
 
         currentViewerGroup = group;
         currentViewerIndex = 0;
@@ -4522,6 +4523,14 @@ async function openStudentPaperViewer(group){
 
 
 async function showViewerPaper(){
+
+
+console.log("SHOW VIEWER PAPER");
+ 
+const filename =
+currentViewerFiles[currentViewerIndex];
+
+console.log(filename);
 
     const filename =
         currentViewerFiles[currentViewerIndex];
@@ -4555,6 +4564,15 @@ setTimeout(() => {
 
 
 function renderStudentPaperViewer(){
+
+console.log("RENDER VIEWER");
+ 
+const viewer =
+document.getElementById(
+"studentPaperViewer"
+);
+ 
+console.log(viewer);
 
     const viewer =
         document.getElementById(
